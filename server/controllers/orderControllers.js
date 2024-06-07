@@ -22,13 +22,21 @@ export const addNewOrderController = async (request, response) => {
           return res.status(400).json({ error: 'Customer ID and Order Amount are required' });
         }
     
-        // Publish message to RabbitMQ
+        
         channel.sendToQueue('orderQueue', Buffer.from(JSON.stringify(request.body)), {
           persistent: true,
         });
     
         response.status(202).json({ message: 'Order creation request received' });
+        setTimeout(() => {
+          channel.close();
+          connection.close();
+        }, 500);  // Ensuring the connection closes after sending the response
       } catch (err) {
         response.status(500).json({ error: err.message });
+        setTimeout(() => {
+          channel.close();
+          connection.close();
+        }, 500);  // Ensuring the connection closes after sending the response
       }
 }

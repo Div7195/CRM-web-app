@@ -1,0 +1,6 @@
+add customer - form
+add order - a form
+create new audience - a form for creating an audience after creating new audience go to all audiences page
+all audiences - list of all audiences
+all campaigns - list of all audiences
+send a campaign - a form, which lets select an audience and a message 
