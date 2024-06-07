@@ -5,6 +5,9 @@ import Order from './models/order-schema.js';
 import dbConnection from './database/db.js';
 import dotenv from 'dotenv'
 import Audience from './models/audience-model.js';
+import nodemailer from 'nodemailer';
+import Campaign from './models/campaign-schema.js';
+import axios from 'axios'
 dotenv.config()
 const PORT = process.env.PORT || 8000;
 const USERNAME = process.env.DB_USERNAME;
@@ -22,7 +25,10 @@ dbConnection(USERNAME, PASSWORD);
   await channel.assertQueue('orderQueue', { durable: true });
   await channel.assertQueue('saveAudienceQueue', { durable: true });
   await channel.assertQueue('checkAudienceSizeQueue', { durable: true });
-  
+  await channel.assertQueue('sendEmailsQueue', { durable: true });
+  await channel.assertQueue('getCampaignsQueue',{durable:true})
+  await channel.assertQueue('getAudiencesQueue', {durable:true})
+  await channel.assertQueue('getSingleAudienceQueue', {durable:true})
   channel.consume('customerQueue', async (msg) => {
     try {
         
@@ -154,7 +160,7 @@ dbConnection(USERNAME, PASSWORD);
       } else {
         firstCondition = { $or: [conditions[0], conditions[1]] };
       }
-  
+      
       
       if (conditions.length === 3) {
         if (operator2 === 'AND') {
@@ -196,6 +202,95 @@ dbConnection(USERNAME, PASSWORD);
      
       channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Error saving audience' })));
       
+      channel.ack(msg);
+    }
+  }, { noAck: false });
+
+
+  channel.consume('sendEmailsQueue', async(msg) => {
+    const { audienceId, subject, messageBody, responseQueue } = JSON.parse(msg.content.toString());
+    try {
+    
+        const list = await Audience.findById(audienceId).populate('customers');
+        if (!list) return res.status(404).json({ error: 'List not found' });
+
+        let testAccount = await nodemailer.createTestAccount()
+        
+            let transporter = nodemailer.createTransport({
+                host: 'smtp.ethereal.email',
+                port: 587,
+                secure: false, 
+                auth: {
+                    user: testAccount.user, 
+                    pass: testAccount.pass
+                }
+            });
+
+        for (const user of list.customers) {
+            const body = messageBody.replace(/\[(\w+)\]/g, (_, prop) => user.customerName || '');
+            await transporter.sendMail({
+                from: testAccount.user,
+                to: user.customerEmail,
+                subject,
+                text: body
+            });
+        }
+
+        const campaign = new Campaign({
+          audienceId,
+          subject,
+          messageBody
+        });
+        await campaign.save();
+        await axios.post('http://localhost:8000/getDeliveryReceipts', { campaignId: campaign._id });
+        channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ msg:'emails sent successfully with 90% receipt rate, campaign saved' })));
+      channel.ack(msg);
+      } catch (error) {
+        console.error('Error sending emails:', error);
+      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Error sending emails' })));
+      channel.ack(msg);
+      }
+  }, { noAck: false })
+
+
+  channel.consume('getCampaignsQueue', async (msg) => {
+    const { responseQueue } = JSON.parse(msg.content.toString());
+    try {
+     
+      const campaigns = await Campaign.find().sort({ date: -1 });
+      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ campaigns })));
+      channel.ack(msg);
+    } catch (error) {
+      console.error('Error fetching campaigns:', error);
+      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Error fetching campaigns' })));
+      channel.ack(msg);
+    }
+  }, { noAck: false });
+
+  channel.consume('getAudiencesQueue', async (msg) => {
+    const { responseQueue } = JSON.parse(msg.content.toString());
+    try {
+     
+      const audiences = await Audience.find();
+      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ audiences })));
+      channel.ack(msg);
+    } catch (error) {
+      console.error('Error fetching audiences:', error);
+      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Error fetching audiences' })));
+      channel.ack(msg);
+    }
+  }, { noAck: false });
+
+  channel.consume('getSingleAudienceQueue', async (msg) => {
+    const { responseQueue, audienceId } = JSON.parse(msg.content.toString());
+    try {
+     
+      const campaigns = await Campaign.find().sort({ date: -1 });
+      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ campaigns })));
+      channel.ack(msg);
+    } catch (error) {
+      console.error('Error fetching campaigns:', error);
+      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Error fetching campaigns' })));
       channel.ack(msg);
     }
   }, { noAck: false });
