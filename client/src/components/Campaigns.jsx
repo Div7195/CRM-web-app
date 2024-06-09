@@ -1,6 +1,8 @@
-import '../css/home.css'
+import '../css/campaigns.css'
 import Sidebar from './Sidebar'
-const Home = () => {
+
+const Campaigns = () => {
+    
     return(
         <>
         <div style={{
@@ -19,21 +21,20 @@ const Home = () => {
                 width:"100vw",
                 height:"90vh"
             }}>
-                    <Sidebar/>
 
-                    <div style={{
+                        <Sidebar/>
+                        <div style={{
                         width:'85%',
-                        height:'100%',
-                        display:'flex',
-                        flexDirection:'column'
-                    }}>
                         
+                        height:'100%'
+                    }}>
 
                     </div>
             </div>
         </div>
+
         </>
     )
 }
 
-export default Home
+export default Campaigns

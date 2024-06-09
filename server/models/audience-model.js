@@ -11,25 +11,25 @@ const audienceSchema = new mongoose.Schema({
   criteria: {
     minTotalSpend: {
       type: Number,
-      required: true,
+      required: false,
     },
     minTotalVisits: {
       type: Number,
-      required: true,
+      required: false,
     },
     lastMonthsNotVisited: {
       type: Number,
-      required: true,
+      required: false,
     },
     operator1: {
       type: String,
       enum: ['AND', 'OR'],
-      required: true,
+      required: false,
     },
     operator2: {
       type: String,
       enum: ['AND', 'OR'],
-      required: true,
+      required: false,
     },
   },
   customers: [{

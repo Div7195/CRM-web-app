@@ -8,6 +8,7 @@ import Audience from './models/audience-model.js';
 import nodemailer from 'nodemailer';
 import Campaign from './models/campaign-schema.js';
 import axios from 'axios'
+
 dotenv.config()
 const PORT = process.env.PORT || 8000;
 const USERNAME = process.env.DB_USERNAME;
@@ -16,12 +17,12 @@ dbConnection(USERNAME, PASSWORD);
 
 (async () => {
     
-    console.log('wow')
+    // console.log('wow')
     
   const connection = await amqp.connect('amqp://127.0.0.1');
   const channel = await connection.createChannel();
-  console.log(channel)
-  await channel.assertQueue('customerQueue', { durable: true });
+  // console.log(channel)
+  await channel.assertQueue('customerQueueee', { durable: true });
   await channel.assertQueue('orderQueue', { durable: true });
   await channel.assertQueue('saveAudienceQueue', { durable: true });
   await channel.assertQueue('checkAudienceSizeQueue', { durable: true });
@@ -29,14 +30,17 @@ dbConnection(USERNAME, PASSWORD);
   await channel.assertQueue('getCampaignsQueue',{durable:true})
   await channel.assertQueue('getAudiencesQueue', {durable:true})
   await channel.assertQueue('getSingleAudienceQueue', {durable:true})
-  channel.consume('customerQueue', async (msg) => {
+  await channel.assertQueue('getCustomerssssQueue', {durable:true})
+  await channel.assertQueue('getOrdersQueue', {durable:true})
+  
+  channel.consume('customerQueueee', async (msg) => {
     try {
         
     
     const customerData = JSON.parse(msg.content.toString());
     
     const newCustomer = new Customer(customerData);
-    console.log(newCustomer)
+    // console.log(newCustomer)
     await newCustomer.save();
     channel.ack(msg);
 } catch (error) {
@@ -192,7 +196,7 @@ dbConnection(USERNAME, PASSWORD);
         },
         customers: filteredCustomers.map(customer => customer._id)
       });
-      console.log(audience)
+      // console.log(audience)
       await audience.save();
       channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ audienceSize })));
       
@@ -264,6 +268,7 @@ dbConnection(USERNAME, PASSWORD);
       console.error('Error fetching campaigns:', error);
       channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Error fetching campaigns' })));
       channel.ack(msg);
+      
     }
   }, { noAck: false });
 
@@ -291,6 +296,73 @@ dbConnection(USERNAME, PASSWORD);
     } catch (error) {
       console.error('Error fetching campaigns:', error);
       channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Error fetching campaigns' })));
+      channel.ack(msg);
+    }
+  }, { noAck: false });
+
+
+  channel.consume('getCustomerssssQueue', async (msg) => {
+    const { responseQueue } = JSON.parse(msg.content.toString());
+    try {
+     
+      const customers = await Customer.find();
+      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ customers })));
+      channel.ack(msg);
+      
+    } catch (error) {
+      console.error('Error fetching customers:', error);
+      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Error fetching customers' })));
+      channel.ack(msg);
+      
+    }
+  }, { noAck: false });
+
+
+  channel.consume('getOrdersQueue', async (msg) => {
+    const { responseQueue, customer } = JSON.parse(msg.content.toString());
+    try {
+      let orders = []
+      let result = []
+      if(customer === 'all'){
+         orders = await Order.find().sort({ date: -1 });
+         result = await Promise.all(
+          orders.map(async (order) => {
+            const customerObj = await Customer.findById(order.customerId);
+            return {
+              customerId: order.customerId,
+              customerName: customerObj ? customerObj.customerName : 'Unknown',
+              orderTotalAmount: order.orderTotalAmount,
+              orderDateStamp: order.orderDateStamp,
+            };
+          })
+        );
+      }else{
+        
+        const customerObj = await Customer.findById(customer);
+
+      if (!customerObj) {
+        return res.status(404).json({ error: 'Customer not found' });
+      }
+        orders = await Order.find({customerId:customer}).sort({ date: -1 });
+         result = await Promise.all(
+          orders.map(async (order) => {
+            const customerObj = await Customer.findById(order.customerId);
+            return {
+              customerId: order.customerId,
+              customerName: customerObj ? customerObj.customerName : 'Unknown',
+              orderTotalAmount: order.orderTotalAmount,
+              orderDateStamp: order.orderDateStamp,
+            };
+          })
+        );
+      }
+      
+      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ result })));
+      channel.ack(msg);
+      
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Error fetching orders' })));
       channel.ack(msg);
     }
   }, { noAck: false });

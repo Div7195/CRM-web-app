@@ -15,7 +15,7 @@ let channel;
 })();
 export const addNewOrderController = async (request, response) => {
     try {
-        const { customerId, orderTotalAmount, orderDateStamp } = request.body;
+        const { customerId, orderTotalAmount } = request.body;
     
         // Input data validation
         if (!customerId || !orderTotalAmount) {
@@ -26,17 +26,37 @@ export const addNewOrderController = async (request, response) => {
         channel.sendToQueue('orderQueue', Buffer.from(JSON.stringify(request.body)), {
           persistent: true,
         });
-    
+        
         response.status(202).json({ message: 'Order creation request received' });
-        setTimeout(() => {
-          channel.close();
-          connection.close();
-        }, 500);  // Ensuring the connection closes after sending the response
+         // Ensuring the connection closes after sending the response
       } catch (err) {
         response.status(500).json({ error: err.message });
-        setTimeout(() => {
-          channel.close();
-          connection.close();
-        }, 500);  // Ensuring the connection closes after sending the response
+          // Ensuring the connection closes after sending the response
       }
+}
+
+export const getOrdersController = async(req, res) => {
+  try {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+    const responseQueue = 'responseQueue8';
+
+    await channel.assertQueue(responseQueue, { durable: true });
+    const customer = req.query.customer
+    const filterRequest = { customer, responseQueue };
+    
+    channel.sendToQueue('getOrdersQueue', Buffer.from(JSON.stringify(filterRequest)), {
+      persistent: true,
+    });
+
+    channel.consume(responseQueue, async(msg) => {
+      const result = JSON.parse(msg.content.toString());
+      res.status(200).json(result);
+      channel.ack(msg);
+      await channel.close();
+      await connection.close();  
+    }, { noAck: false });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }

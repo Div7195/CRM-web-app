@@ -4,31 +4,24 @@ import amqp from 'amqplib';
 import Audience from "../models/audience-model.js";
 import DeliveryReceipt from "../models/commslog-schema.js";
 import Campaign from "../models/campaign-schema.js";
-let channel;
-(async () => {
-    try {
-        
-    
-  const connection = await amqp.connect('amqp://127.0.0.1');
-  channel = await connection.createChannel();
-  await channel.assertQueue('customerQueue', { durable: true });
-} catch (error) {
-    console.log(error, 'customer')
-}
-})();
+
 
 export const addCustomerController = async (request, response) => {
     try {
-        const { customerName, customerEmail, customerTotalSpend, customerTotalVisits, lastVisitDate } = request.body;
+        const { customerName, customerEmail } = request.body;
     
         // Input data validation
         if (!customerName || !customerEmail) {
           return res.status(400).json({ error: 'Name and Email are required' });
         }
-    
+        const connection = await amqp.connect('amqp://localhost');
+        const channel = await connection.createChannel();
+        const responseQueue = 'responseQueueee2';
+
+    await channel.assertQueue(responseQueue, { durable: true });
         
         
-        channel.sendToQueue('customerQueue', Buffer.from(JSON.stringify(request.body)), {
+        channel.sendToQueue('customerQueueee', Buffer.from(JSON.stringify(request.body)), {
           persistent: true,
         });
     
@@ -176,15 +169,14 @@ export const getCampaignsController = async(req, res) => {
       persistent: true,
     });
 
-    channel.consume(responseQueue, (msg) => {
+    channel.consume(responseQueue, async(msg) => {
       const result = JSON.parse(msg.content.toString());
       res.status(200).json(result);
       channel.ack(msg);
-      setTimeout(() => {
-        channel.close();
-        connection.close();
-      }, 500);  
+      await channel.close();
+      await connection.close();
     }, { noAck: false });
+      
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -236,14 +228,12 @@ export const getAllAudiencesController = async(req, res) => {
       persistent: true,
     });
 
-    channel.consume(responseQueue, (msg) => {
+    channel.consume(responseQueue, async(msg) => {
       const result = JSON.parse(msg.content.toString());
       res.status(200).json(result);
       channel.ack(msg);
-      setTimeout(() => {
-        channel.close();
-        connection.close();
-      }, 500);  
+      await channel.close();
+      await connection.close();
     }, { noAck: false });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -275,6 +265,36 @@ export const getSingleAudience = async(req, res) => {
       }, 500);  
     }, { noAck: false });
   } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export const getCustomersController = async(req, res) => {
+
+  try {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+    const responseQueue = 'responseGetCustomerssss1';
+
+    await channel.assertQueue(responseQueue, { durable: true });
+
+    const filterRequest = { responseQueue };
+    
+    channel.sendToQueue('getCustomerssssQueue', Buffer.from(JSON.stringify(filterRequest)), {
+      persistent: true,
+    });
+
+    channel.consume(responseQueue, async(msg) => {
+      const result = JSON.parse(msg.content.toString());
+      res.status(200).json(result);
+      channel.ack(msg);
+      await channel.close();
+      await connection.close();
+        
+    }, { noAck: false });
+      
+  } catch (error) {
+   
     res.status(500).json({ error: error.message });
   }
 }

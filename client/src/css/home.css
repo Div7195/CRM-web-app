@@ -9,6 +9,7 @@
       display: inline-block;
   }
   .header{
+    height: 10vh;
     background : rgb(3,37,65);
     width: 100%;
       padding: 5px 0;
