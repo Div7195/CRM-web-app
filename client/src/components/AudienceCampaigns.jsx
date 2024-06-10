@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 const AudienceCampaigns = () => {
+    const [reload, setReload] = useState(false)
     const {customerId} = useParams()
 const options = {
   weekday: 'long',
@@ -77,7 +78,7 @@ const options = {
         }
         
         myFunction()
-    }, [])
+    }, [reload])
       
     
     return(
@@ -97,7 +98,7 @@ const options = {
                         <Sidebar/>
                         <div className='main-content-box'>
                         
-
+                        <div className='reload' onClick={() => {reload === true ? setReload(false) : setReload(true)}}>Reload Data</div>
                             
                         <div className='list-box'>
                                 {

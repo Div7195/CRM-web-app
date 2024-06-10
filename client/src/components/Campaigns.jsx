@@ -5,6 +5,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect } from 'react';
 import CampaignIcon from '@mui/icons-material/Campaign';
 const Campaigns = () => {
+    const [reload, setReload] = useState(false)
     const isoTimestamp = '2024-06-07T13:41:09.063Z';
 const date = new Date(isoTimestamp);
 
@@ -119,7 +120,7 @@ const options = {
         }
         
         myFunction()
-    }, [])
+    }, [reload])
       
     
     return(
@@ -139,6 +140,10 @@ const options = {
                         <Sidebar/>
                         <div className='main-content-box'
                     >
+                                <div className='temp-div'>
+                                <div className='reload'
+                                onClick={() => {reload === true?setReload(false):setReload(true)}}
+                                >Reload data</div>
                         <div className='choose-button' onClick={() => {openAddForm()}}>
                                 <CampaignIcon style={{
                                 fontSize:"40px",
@@ -146,7 +151,7 @@ const options = {
                               }}
                               />  Send a campaign
                         </div>
-
+                        </div>
                         <div onClick={(e) => {closeAddForm(e)}}>
                         <div className={`popup-container ${isPopupVisible ? 'show' : ''}`} >
                             <div className="form-container" onClick={(e) => e.stopPropagation()}>

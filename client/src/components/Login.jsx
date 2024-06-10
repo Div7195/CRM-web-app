@@ -84,8 +84,9 @@ const Login = () => {
                         
                         <Button
                             onClick={loginUsingGoogle}
-                            className='google-btn'
-                            >
+                            style={{
+                                textTransform: 'none',backgroundColor: 'black',color: '#41ef1a',height: '48px', borderRadius: '7px',boxShadow: '0 2px 4px 0 rgb(0 0 0 / 20%)', marginTop: '20px'
+                            }}>
                             SIGN IN WITH GOOGLE
                         </Button>
                     </div>

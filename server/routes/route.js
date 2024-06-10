@@ -4,12 +4,13 @@ import multer from 'multer';
 import { addCustomerController, checkAudienceSizeController, deliveryReceiptController, getAllAudiencesController, getCampaignsController, getCustomersController, getSingleAudience, saveAudienceController, sendEmailsController } from '../controllers/customerControllers.js';
 import { addNewOrderController, getOrdersController } from '../controllers/orderControllers.js';
 import { loginUserController } from '../controllers/loginControllers.js';
+import checkAuthentication from '../middleware/checkAuth.js';
 
 
 const router = express.Router();
 
 router.post('/addCustomer', addCustomerController);
-router.get('/getCustomers', getCustomersController);
+router.get('/getCustomers',checkAuthentication, getCustomersController);
 router.post('/addOrder', addNewOrderController);
 router.get('/getOrders', getOrdersController);
 router.post('/getAudienceSize', checkAudienceSizeController);

@@ -5,6 +5,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 const CustomerOrders = () => {
+    const [reload, setReload] = useState(false)
 const {customerId} = useParams()
 const options = {
   weekday: 'long',
@@ -68,7 +69,7 @@ const options = {
         }
         
         myFunction()
-    }, [])
+    }, [reload])
       
     
     return(
@@ -89,7 +90,7 @@ const options = {
                         <div className='main-content-box'
                     >
                        
-                            
+                            <div className='reload' onClick={() => {reload === true?setReload(false):setReload(true)}}>Reload Data</div>
                             <div className='list-box'>
                                 {
                                     orders && orders.length > 0 ? 

@@ -1,6 +1,6 @@
 .choose-button {
     padding: 8px;
-    width: 50%;
+    width: 80%;
     background: #4767a4;
     font-family: 'DM Sans', sans-serif;
     margin-top: 10px;
@@ -12,7 +12,25 @@
     justify-content: center;
     cursor: pointer;
   }
+  .temp-div{
+    display: flex;
+    width: 50%;
 
+  }
+  .reload{
+    text-align: center;
+    color: white;
+    background: #14515a;
+    display: flex;
+    padding: 8px;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 5px;
+    align-items: center;
+
+  }
   .popup-container {
     display: none;
     position: fixed;

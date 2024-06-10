@@ -147,7 +147,25 @@ background: #cee3f6;
 margin-top: 10px;
 
 }
+.temp-div{
+  display: flex;
+  width: 50%;
 
+}
+.reload{
+  text-align: center;
+  color: white;
+  background: #14515a;
+  display: flex;
+  padding: 8px;
+  border-radius: 15px;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 5px;
+  align-items: center;
+
+}
 
 .item-value-1{
   font-size: 20px;

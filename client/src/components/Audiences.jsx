@@ -5,6 +5,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Orders = () => {
+    const [reload, setReload] = useState(false)
     const navigate = useNavigate()
     const isoTimestamp = '2024-06-07T13:41:09.063Z';
 const date = new Date(isoTimestamp);
@@ -231,7 +232,7 @@ const options = {
         }
         
         myFunction()
-    }, [])
+    }, [reload])
       
     
     return(
@@ -251,6 +252,11 @@ const options = {
                         <Sidebar/>
                         <div className='sub-box'
                     >
+                        
+                        <div className='temp-div'>
+                                <div className='reload'
+                                onClick={() => {reload === true?setReload(false):setReload(true)}}
+                                >Reload data</div>
                         <div className='choose-button' onClick={() => {openAddForm()}}>
                                 <AddCircleIcon style={{
                                 fontSize:"40px",
@@ -258,7 +264,7 @@ const options = {
                               }}
                               />  Add an audience
                         </div>
-
+                        </div>
 
 
                         <div className='campaign-form-popup' onClick={(e) => {closeAddFormSecond(e)}}>

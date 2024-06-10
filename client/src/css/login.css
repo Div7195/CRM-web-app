@@ -31,7 +31,7 @@ color: #41ef1a;
 
 }
 
-.google-btn{
+.google-btnn{
 text-transform: none;
 background-color: black;
 color: #41ef1a;
@@ -41,3 +41,17 @@ box-shadow: 0 2px 4px 0 rgb(0 0 0 / 20%);
 margin-top: 20px;
 
 }
+.reload{
+    text-align: center;
+    color: white;
+    background: #14515a;
+    display: flex;
+    padding: 8px;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 5px;
+    align-items: center;
+
+  }

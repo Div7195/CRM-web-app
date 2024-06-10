@@ -5,6 +5,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Customers = () => {
+    const [reload, setReload] = useState(false)
     const navigate = useNavigate()
     const options = {
         weekday: 'long',
@@ -85,7 +86,7 @@ const Customers = () => {
         }
         
         myFunction()
-    }, [])
+    }, [reload])
       
     
     return(
@@ -104,13 +105,26 @@ const Customers = () => {
 
                         <Sidebar/>
                         <div className='main-content-box'>
-                        <div className='choose-button' onClick={() => {openAddForm()}}>
-                                <AddCircleIcon style={{
-                                fontSize:"40px",
-                                
-                              }}
-                              />  Add a customer
-                        </div>
+
+                            <div className='temp-div'>
+                                <div className='reload'
+                                onClick={() => {reload === true?setReload(false):setReload(true)}}
+                                >Reload data</div>
+                                <div className='choose-button' onClick={() => {openAddForm()}}>
+                                        <AddCircleIcon style={{
+                                        fontSize:"40px",
+                                        
+                                    }}
+                                    />  Add a customer
+                                </div>
+                            </div>
+                            
+                           
+                            
+                           
+                           
+                        
+                        
 
                         <div onClick={(e) => {closeAddForm(e)}}>
                         <div className={`popup-container ${isPopupVisible ? 'show' : ''}`} >

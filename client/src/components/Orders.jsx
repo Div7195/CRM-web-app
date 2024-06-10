@@ -4,7 +4,7 @@ import { useState } from 'react';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect } from 'react';
 const Orders = () => {
-
+const [reload, setReload] = useState(false)
 const options = {
   weekday: 'long',
   year: 'numeric',
@@ -97,7 +97,7 @@ const options = {
         }
         
         myFunction()
-    }, [])
+    }, [reload])
       
     
     return(
@@ -117,6 +117,10 @@ const options = {
                         <Sidebar/>
                         <div className='main-content-box'
                     >
+                        <div className='temp-div'>
+                                <div className='reload'
+                                onClick={() => {reload === true?setReload(false):setReload(true)}}
+                                >Reload data</div>
                         <div className='choose-button' onClick={() => {openAddForm()}}>
                                 <AddCircleIcon style={{
                                 fontSize:"40px",
@@ -124,7 +128,7 @@ const options = {
                               }}
                               />  Add an order
                         </div>
-
+                        </div>
                         <div onClick={(e) => {closeAddForm(e)}}>
                         <div className={`popup-container ${isPopupVisible ? 'show' : ''}`} >
                             <div className="form-container" onClick={(e) => e.stopPropagation()}>
