@@ -22,7 +22,7 @@ const Sidebar = () => {
         }}> 
 
         {
-            window.location.pathname.includes('/customers') === true?
+            window.location.pathname == '/customers' === true?
             <div style={{
                 display:'flex',
                 flexDirection:'row',

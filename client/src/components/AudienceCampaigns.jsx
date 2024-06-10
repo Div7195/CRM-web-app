@@ -3,7 +3,10 @@ import Sidebar from './Sidebar'
 import { useState } from 'react';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect } from 'react';
-const Orders = () => {
+import { useParams } from 'react-router-dom';
+import CampaignIcon from '@mui/icons-material/Campaign';
+const AudienceCampaigns = () => {
+    const {audienceId} = useParams()
     const isoTimestamp = '2024-06-07T13:41:09.063Z';
 const date = new Date(isoTimestamp);
 
@@ -25,11 +28,19 @@ const options = {
         orderTotalAmount:'',
         
     })
+    const [message, setMessage] = useState('')
+    const [email, setEmail] = useState({
+        audienceId:'',
+        subject:'',
+        messageBody:'',
+        
+    })
     const [isPopupVisible, setIsPopupVisible] = useState(false);
-    const [orders, setOrders] = useState([])
-    const [customers, setCustomers] = useState([])
-    const openAddForm = () => {
+    const [campaigns, setCampaigns] = useState([])
+    const [audiences, setAudiences] = useState([])
+    const openAddForm = (id, name) => {
         setIsPopupVisible(true)
+        
     }   
     const closeAddForm = (e) => {
         if (e.target.className.includes('popup-container')) {
@@ -37,61 +48,33 @@ const options = {
         }
       };
 
-    const onValueChange = (e) => {
-        setNewOrder({...newOrder, [e.target.name]:e.target.value})
-        console.log(newOrder)
-    }
+    const onValueChangeSecond = (e) => {
+        setEmail({...email, [e.target.name] : e.target.value})
+        console.log(email)
+      }
     const onSelectValueChange = (e) => {
-        setNewOrder({...newOrder, [e.target.name]:e.target.value})
+        setEmail({...email, audienceId:e.target.value})
         console.log(newOrder)
     }
 
 
-      const addNewOrderApi = async() =>{
-        
-        const settings = {
-         method: "POST",
-         body: JSON.stringify(newOrder),
-         headers: {
-             "Content-type": "application/json; charset=UTF-8"
-         },
-         credentials: "include",
-         }
-         try {
-             console.log(settings.body)
-             const fetchResponse = await fetch(`http://localhost:8000/addOrder`, settings);
-             const response = await fetchResponse.json();
-             setNewOrder({
-                customerId:'',
-                orderTotalAmount:'',
-                
-            });
-            setIsPopupVisible(false)
-             
-         } catch (e) {
-            //  setError('Something went wrong, please try again later');
-             return e;
-         }    
-     }
+    
       
       useEffect(() => {
         
         const myFunction = async() => {
-            const url1 = `http://localhost:8000/getOrders?customer=all`;
+            const url1 = `http://localhost:8000/getAllCampaigns?audienceId=${audienceId}`;
             const settings = {
             method: 'GET',
             credentials: "include",
             };
-            const url2 = "http://localhost:8000/getCustomers"
+            const url2 = "http://localhost:8000/getAllAudiences"
         
         try {
             const fetchResponse = await fetch(url1, settings);
             const response = await fetchResponse.json();
-            setOrders(response.result)
-            const fetchResponse2 = await fetch(url2, settings);
-            const response2 = await fetchResponse2.json();
-            console.log(response2.customers)
-            setCustomers(response2.customers)
+            setCampaigns(response.campaigns)
+
             } catch (e) {
             console.log(e);
             }
@@ -130,56 +113,8 @@ const options = {
                         alignItems:'center'
                     }}
                     >
-                        <div className='choose-button' onClick={() => {openAddForm()}}>
-                                <AddCircleIcon style={{
-                                fontSize:"40px",
-                                
-                              }}
-                              />  Add an order
-                        </div>
+                        
 
-                        <div onClick={(e) => {closeAddForm(e)}}>
-                        <div className={`popup-container ${isPopupVisible ? 'show' : ''}`} >
-                            <div className="form-container" onClick={(e) => e.stopPropagation()}>
-                                <h2 style={{ fontFamily: 'AktivGrotesk-Bold',  textAlign:'center' }}>Add a new order</h2>
-                                <form >
-                                
-                                <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                                    <select className='fname' placeholde="Select customer" name='customerId' id='fname' onChange={(e)=>{onSelectValueChange(e)}} >
-
-                                        {
-                                            customers && customers.length > 0?
-                                            customers.map(e => (
-                                                <>
-                                            <option style={{
-                                                background:'white',
-                                                color:'black',
-                                            }}
-                                            
-                                            value={e._id}
-                                            >
-                                                {`${e.customerName} - ID:${e._id}`}
-                                            </option>
-                                            </>
-                                            ))
-                                            
-
-                                            :
-                                            <></>
-                                        }
-                                    </select>
-                                        
-                                        
-
-                                    {/* <input className="fname"  placeholder="Enter customer id*" type="text" name="customerId" id='fname' onChange={(e) => {onValueChange(e)}} /> */}
-                                    <input className="lname" placeholder="Enter total amount*" type="number" name="orderTotalAmount" id='lname'onChange={(e) => {onValueChange(e)}}/>
-                                </div>
-                                
-                                <div className='btn' onClick={addNewOrderApi}>Add order</div>
-                                </form>
-                            </div>
-                            </div>
-                        </div>
                             
                             <div style={{
                                 display:'flex',
@@ -190,8 +125,8 @@ const options = {
                                 marginTop:'10px'
                             }}>
                                 {
-                                    orders && orders.length > 0 ? 
-                                    orders.map(e => (
+                                    campaigns && campaigns.length > 0 ? 
+                                    campaigns.map(e => (
                                         <>
                                         <div style={{
                                             width:'100%',
@@ -213,7 +148,7 @@ const options = {
                                                     fontWeight:'750',
                                                     color:'#702cf6'
                                                 }}>
-                                                    Customer Id:
+                                                    Audience Id:
                                                 </div>
 
                                                 <div style={{
@@ -221,7 +156,7 @@ const options = {
                                                     fontWeight:'600',
                                                     marginLeft:'10px'
                                                 }}>
-                                                    {e.customerId}
+                                                    {e.audienceId}
                                                 </div>
                                             </div>
                                             <div style={{
@@ -233,7 +168,7 @@ const options = {
                                                     fontWeight:'750',
                                                     color:'#702cf6'
                                                 }}>
-                                                    Customer name:
+                                                    Audience name:
                                                 </div>
 
                                                 <div style={{
@@ -241,7 +176,7 @@ const options = {
                                                     fontWeight:'600',
                                                     marginLeft:'10px'
                                                 }}>
-                                                    {e.customerName}
+                                                    {e.audienceName}
                                                 </div>
                                             </div>
 
@@ -254,7 +189,7 @@ const options = {
                                                     fontWeight:'750',
                                                     color:'#702cf6'
                                                 }}>
-                                                    Total amount:
+                                                    Subject:
                                                 </div>
 
                                                 <div style={{
@@ -262,7 +197,32 @@ const options = {
                                                     fontWeight:'600',
                                                     marginLeft:'10px'
                                                 }}>
-                                                    {e.orderTotalAmount}
+                                                    {e.subject}
+                                                </div>
+                                            </div>
+
+                                            <div style={{
+                                                display:'flex',
+                                                flexDirection:'row',
+                                            }}>
+                                                <div style={{
+                                                    fontSize:'20px',
+                                                    fontWeight:'750',
+                                                    color:'#702cf6',
+                                                    width:'22%'
+                                                }}>
+                                                    Message body:
+                                                </div>
+
+                                                <div style={{
+                                                    width:'78%',
+                                                    fontSize:'16px',
+                                                    fontWeight:'500',
+                                                    marginTop:'5px',
+                                                    
+                                                    display:'flex',
+                                                }}>
+                                                    {e.messageBody}
                                                 </div>
                                             </div>
 
@@ -277,7 +237,7 @@ const options = {
                                                     fontWeight:'750',
                                                     color:'#702cf6'
                                                 }}>
-                                                    Date of order:
+                                                    Date:
                                                 </div>
 
                                                 <div style={{
@@ -286,7 +246,7 @@ const options = {
                                                     marginLeft:'10px',
                                                     marginTop:'5px'
                                                 }}>
-                                                    {new Date(e.orderDateStamp).toLocaleString('en-US', options)};
+                                                    {new Date(e.date).toLocaleString('en-US', options)};
                                                 </div>
                                             </div>
 
@@ -327,4 +287,6 @@ const options = {
     )
 }
 
-export default Orders
+export default AudienceCampaigns
+
+

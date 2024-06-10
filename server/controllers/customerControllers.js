@@ -39,12 +39,7 @@ export const checkAudienceSizeController = async (req, res) => {
   try {
     const { minTotalSpend, minTotalVisits, lastMonthsNotVisited, operator1, operator2 } = req.body;
     console.log(req.body)
-    if (![minTotalSpend, minTotalVisits, lastMonthsNotVisited].every(cond => cond !== undefined)) {
-      return res.status(400).json({ error: 'All conditions must be provided' });
-    }
-    if (!['AND', 'OR'].includes(operator1) || !['AND', 'OR'].includes(operator2)) {
-      return res.status(400).json({ error: 'Invalid operators' });
-    }
+    
 
     const connection = await amqp.connect('amqp://localhost');
     const channel = await connection.createChannel();
@@ -59,22 +54,16 @@ export const checkAudienceSizeController = async (req, res) => {
       persistent: true,
     });
 
-    channel.consume(responseQueue, (msg) => {
+    channel.consume(responseQueue, async(msg) => {
       const result = JSON.parse(msg.content.toString());
       res.status(200).json(result);
       channel.ack(msg);
-      setTimeout(() => {
-        channel.close();
-        connection.close();
-      }, 500); 
+      await channel.close();
+      await connection.close();
     }, { noAck: false });
 
   } catch (error) {
     res.status(500).json({ error: error.message });
-    setTimeout(() => {
-      channel.close();
-      connection.close();
-    }, 500);  
   }
 };
 
@@ -85,12 +74,7 @@ export const saveAudienceController = async (req, res) => {
     const name = req.body.name;
     const description = req.body.description;
     
-    if (![minTotalSpend, minTotalVisits, lastMonthsNotVisited].every(cond => cond !== undefined)) {
-      return res.status(400).json({ error: 'All conditions must be provided' });
-    }
-    if (!['AND', 'OR'].includes(operator1) || !['AND', 'OR'].includes(operator2)) {
-      return res.status(400).json({ error: 'Invalid operators' });
-    }
+    
 
     const connection = await amqp.connect('amqp://localhost');
     const channel = await connection.createChannel();
@@ -104,14 +88,12 @@ export const saveAudienceController = async (req, res) => {
       persistent: true,
     });
 
-    channel.consume(responseQueue, (msg) => {
+    channel.consume(responseQueue, async(msg) => {
       const result = JSON.parse(msg.content.toString());
       res.status(200).json(result);
       channel.ack(msg);
-      setTimeout(() => {
-        channel.close();
-        connection.close();
-      }, 500);  
+      await channel.close();
+      await connection.close();
     }, { noAck: false });
 
   } catch (error) {
@@ -162,8 +144,8 @@ export const getCampaignsController = async(req, res) => {
     const responseQueue = 'responseQueue4';
 
     await channel.assertQueue(responseQueue, { durable: true });
-
-    const filterRequest = { responseQueue };
+    const audienceId = req.query.audienceId
+    const filterRequest = { responseQueue, audienceId };
     
     channel.sendToQueue('getCampaignsQueue', Buffer.from(JSON.stringify(filterRequest)), {
       persistent: true,
@@ -277,8 +259,8 @@ export const getCustomersController = async(req, res) => {
     const responseQueue = 'responseGetCustomerssss1';
 
     await channel.assertQueue(responseQueue, { durable: true });
-
-    const filterRequest = { responseQueue };
+    const audienceId = req.query.audienceId
+    const filterRequest = { responseQueue, audienceId };
     
     channel.sendToQueue('getCustomerssssQueue', Buffer.from(JSON.stringify(filterRequest)), {
       persistent: true,

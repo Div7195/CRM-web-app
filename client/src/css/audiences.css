@@ -86,7 +86,7 @@
     border-radius: 3px;
   }
   
-  .form-container button {
+  .form-container .btn {
     width: 100%;
     background-color: #8533ff;
     display: flex;
@@ -106,3 +106,26 @@
     font-weight: 720;
     margin-bottom: 20px;
   }
+
+
+  .campaign-form-popup.popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .campaign-form-popup.popup-container.show {
+    display: flex;
+    opacity: 1;
+  }
+  
+  

@@ -57,17 +57,70 @@ dbConnection(USERNAME, PASSWORD);
     const newOrder = new Order(orderData);
     await newOrder.save();
 
-  
     const customer = await Customer.findById(orderData.customerId);
     if (customer) {
-      customer.customerTotalSpend += orderData.orderTotalAmount;
-      customer.customerTotalVisits += 1;
-      customer.lastVisitDate = new Date();
-      await customer.save();
+        customer.customerTotalSpend += newOrder.orderTotalAmount;
+        customer.customerTotalVisits += 1;
+        customer.lastVisitDate = new Date();
+        await customer.save();
+    }
+
+    const audiences = await Audience.find();
+    const now = new Date();
+    const pastDate = new Date();
+    
+    for (const audience of audiences) {
+        const { criteria } = audience;
+        
+        const conditions = [];
+
+        if (criteria.minTotalSpend !== undefined) {
+            conditions.push({ customerTotalSpend: { $gte: criteria.minTotalSpend } });
+        }
+
+        if (criteria.minTotalVisits !== undefined) {
+            conditions.push({ customerTotalVisits: { $gte: criteria.minTotalVisits } });
+        }
+
+        if (criteria.lastMonthsNotVisited !== undefined) {
+            pastDate.setMonth(now.getMonth() - criteria.lastMonthsNotVisited);
+            conditions.push({ lastVisitDate: { $lt: pastDate } });
+        }
+
+        let query = {};
+
+        if (conditions.length > 1) {
+            let firstCondition;
+            if (criteria.operator1 === 'AND') {
+                firstCondition = { $and: [conditions[0], conditions[1]] };
+            } else {
+                firstCondition = { $or: [conditions[0], conditions[1]] };
+            }
+
+            if (conditions.length === 3) {
+                if (criteria.operator2 === 'AND') {
+                    query = { $and: [firstCondition, conditions[2]] };
+                } else {
+                    query = { $or: [firstCondition, conditions[2]] };
+                }
+            } else {
+                query = firstCondition;
+            }
+        } else if (conditions.length === 1) {
+            query = conditions[0];
+        }
+
+        const isInCriteria = await Customer.exists({ _id: orderData.customerId, ...query });
+
+        if (isInCriteria && !audience.customers.includes(orderData.customerId)) {
+            audience.customers.push(orderData.customerId);
+            await audience.save();
+        }
     }
 
     channel.ack(msg);
-  }, { noAck: false });
+}, { noAck: false });
+
 
  
 
@@ -258,12 +311,24 @@ dbConnection(USERNAME, PASSWORD);
 
 
   channel.consume('getCampaignsQueue', async (msg) => {
-    const { responseQueue } = JSON.parse(msg.content.toString());
+    const { responseQueue, audienceId } = JSON.parse(msg.content.toString());
     try {
-     
-      const campaigns = await Campaign.find().sort({ date: -1 });
-      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ campaigns })));
-      channel.ack(msg);
+      let campaigns = []
+      if(audienceId === "nil"){
+        campaigns = await Campaign.find().sort({ date: -1 });
+      }else{
+        campaigns = await Campaign.find({ audienceId }).sort({ date: -1 });
+      }
+      const campaignsWithAudienceNames = await Promise.all(campaigns.map(async (campaign) => {
+        const audience = await Audience.findById(campaign.audienceId);
+        const audienceName = audience ? audience.name : 'Unknown Audience';
+        return {
+            ...campaign.toObject(),
+            audienceName
+        };
+    }));
+    channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ campaigns:campaignsWithAudienceNames })));
+        channel.ack(msg);
     } catch (error) {
       console.error('Error fetching campaigns:', error);
       channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Error fetching campaigns' })));
@@ -302,12 +367,29 @@ dbConnection(USERNAME, PASSWORD);
 
 
   channel.consume('getCustomerssssQueue', async (msg) => {
-    const { responseQueue } = JSON.parse(msg.content.toString());
+    const { responseQueue, audienceId } = JSON.parse(msg.content.toString());
+    
+    let customers = []
     try {
-     
-      const customers = await Customer.find();
+      if(audienceId !== "nil"){
+        
+        const audience = await Audience.findById(audienceId).populate('customers');
+        
+        if (!audience) {
+          channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Customers for this audience not found' })));
+          channel.ack(msg);
+          return;
+      }
+      customers = audience.customers
+      
       channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ customers })));
       channel.ack(msg);
+      }else{
+      customers = await Customer.find();
+      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ customers })));
+      channel.ack(msg);
+      }
+      
       
     } catch (error) {
       console.error('Error fetching customers:', error);

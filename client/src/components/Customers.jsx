@@ -65,7 +65,7 @@ const Customers = () => {
       useEffect(() => {
         
         const myFunction = async() => {
-            const url = `http://localhost:8000/getCustomers`;
+            const url = `http://localhost:8000/getCustomers?audienceId=nil`;
             const settings = {
             method: 'GET',
             credentials: "include",
@@ -133,7 +133,7 @@ const Customers = () => {
                                     <input className="lname" placeholder="Enter email*" type="email" name="customerEmail" id='lname'onChange={(e) => {onValueChange(e)}}/>
                                 </div>
                                 
-                                <button onClick={addNewCustomerApi}>Add customer</button>
+                                <div className='btn' onClick={addNewCustomerApi}>Add customer</div>
                                 </form>
                             </div>
                             </div>
