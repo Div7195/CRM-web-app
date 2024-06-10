@@ -13,25 +13,52 @@ const Home = () => {
                 Xeno Task - Mini CRM
                 </div>
             </div>
-            <div style={{
-                display:'flex',
-                flexDirection:'row',
-                width:"100vw",
-                height:"90vh"
-            }}>
+            <div className='classA'>
                     <Sidebar/>
 
-                    <div style={{
-                        width:'85%',
-                        height:'100%',
-                        display:'flex',
-                        flexDirection:'column'
-                    }}>
-                        
+                    <div className='classB'>
+                <div style={{
+                display:'flex',flexDirection:'column',width:'100%'
+                }}>
 
+                <div className="sub-boxx">
+
+                    <div style={{
+                        fontSize:'40px'
+                    }}>
+                         Internship Assignment Task
+                    </div>
+                    <div style={{
+                        fontSize:'70px',
+                        fontWeight:'700',
+                        color:'#04274a'
+                    }}>
+                        Mini CRM Application
+                    </div>
+                    
+                    <div style={{
+                        fontSize:'25px'
+                    }}>
+                        Facilities To Manage Customers, Orders
+                    </div>
+                    <div style={{
+                        fontSize:'25px'
+                    }}>
+                        Facilities To Send Campaigns
+                    </div>
+                </div>
+
+                <div className='classC'>
+                    <img style={{width:'60%',
+                    height:'70%',
+                     borderRadius:'80px'}} src='https://i0.wp.com/lemonlearning.com/wp-content/uploads/2023/01/CRM-1-scaled.jpg?fit=2560%2C1707&ssl=1'/>
+
+                </div>
+            </div>
+                    </div>
                     </div>
             </div>
-        </div>
+        
         </>
     )
 }

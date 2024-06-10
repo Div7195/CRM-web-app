@@ -14,6 +14,8 @@ import Orders from './components/Orders';
 import Customers from './components/Customers';
 import AudienceCustomers from './components/AudienceCustomers';
 import AudienceCampaigns from './components/AudienceCampaigns';
+import CustomerOrders from './components/CustomerOrders';
+import CustomerCampaigns from './components/CustomerCampaigns';
 function App() {
   const [user, setUser] = useState(null);
   
@@ -58,6 +60,8 @@ function App() {
                 <Route path="/audiences" element={user ? <Audiences/> : <Login />}/>
                 <Route path="/audience/:audienceId/customers" element={user ? <AudienceCustomers/> : <Login />}/>
                 <Route path="/audience/:audienceId/commslog" element={user ? <AudienceCampaigns/> : <Login />}/>
+                <Route path="/customer/:customerId/orders" element={user ? <CustomerOrders/> : <Login />}/>
+                <Route path="/customer/:customerId/commslog" element={user ? <CustomerCampaigns/> : <Login />}/>
                 <Route path="/campaigns" element={user ? <Campaigns/> : <Login />}/>
                 <Route path="/orders" element={user ? <Orders/> : <Login />}/>
                 <Route path="/customers" element={user ? <Customers/> : <Login />}/>

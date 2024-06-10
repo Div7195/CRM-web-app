@@ -1,4 +1,4 @@
-import '../css/orders.css'
+import '../css/campaigns.css'
 import Sidebar from './Sidebar'
 import { useState } from 'react';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -134,21 +134,10 @@ const options = {
                 Xeno Task - Mini CRM
                 </div>
             </div>
-            <div style={{
-                display:'flex',
-                flexDirection:'row',
-                width:"100vw",
-                height:'100vh'
-            }}>
+            <div className='main-box'>
 
                         <Sidebar/>
-                        <div style={{
-                        width:'85%',
-                        height:'100%',
-                        display:'flex',
-                        flexDirection:'column',
-                        alignItems:'center'
-                    }}
+                        <div className='main-content-box'
                     >
                         <div className='choose-button' onClick={() => {openAddForm()}}>
                                 <CampaignIcon style={{
@@ -210,46 +199,22 @@ const options = {
                             </div>
                         </div>
                             
-                            <div style={{
-                                display:'flex',
-                                flexDirection:'column',
-                                alignItems:'center',
-                                justifyContent:'center',
-                                width:'50%',
-                                marginTop:'10px'
-                            }}>
+                            <div className='list-box'>
                                 {
                                     campaigns && campaigns.length > 0 ? 
                                     campaigns.map(e => (
                                         <>
-                                        <div style={{
-                                            width:'100%',
-                                            display:'flex',
-                                            flexDirection:'column',
-                                            padding:'5px',
-                                            border:'2px solid black',
-                                            borderRadius:'5px',
-                                            background:'#cee3f6',
-                                            marginTop:'10px'
-                                        }}>
+                                        <div className='list-box-item'>
 
                                             <div style={{
                                                 display:'flex',
                                                 flexDirection:'row'
                                             }}>
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'750',
-                                                    color:'#702cf6'
-                                                }}>
+                                                <div className='item-titlee'>
                                                     Audience Id:
                                                 </div>
 
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'600',
-                                                    marginLeft:'10px'
-                                                }}>
+                                                <div className='item-value-1'>
                                                     {e.audienceId}
                                                 </div>
                                             </div>
@@ -257,19 +222,11 @@ const options = {
                                                 display:'flex',
                                                 flexDirection:'row'
                                             }}>
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'750',
-                                                    color:'#702cf6'
-                                                }}>
+                                                <div className='item-titlee'>
                                                     Audience name:
                                                 </div>
 
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'600',
-                                                    marginLeft:'10px'
-                                                }}>
+                                                <div className='item-value-1'>
                                                     {e.audienceName}
                                                 </div>
                                             </div>
@@ -278,20 +235,24 @@ const options = {
                                                 display:'flex',
                                                 flexDirection:'row'
                                             }}>
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'750',
-                                                    color:'#702cf6'
-                                                }}>
+                                                <div className='item-titlee'>
                                                     Subject:
                                                 </div>
 
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'600',
-                                                    marginLeft:'10px'
-                                                }}>
+                                                <div className='item-value-1'>
                                                     {e.subject}
+                                                </div>
+                                            </div>
+                                            <div style={{
+                                                display:'flex',
+                                                flexDirection:'row',
+                                            }}>
+                                                <div className='item-titlee'>
+                                                    Message body:
+                                                </div>
+
+                                                <div className='item-value-4'>
+                                                    {e.messageBody}
                                                 </div>
                                             </div>
 
@@ -299,26 +260,42 @@ const options = {
                                                 display:'flex',
                                                 flexDirection:'row',
                                             }}>
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'750',
-                                                    color:'#702cf6',
-                                                    width:'22%'
-                                                }}>
-                                                    Message body:
+                                                <div className='item-titlee'>
+                                                    Audience Size:
                                                 </div>
 
-                                                <div style={{
-                                                    width:'78%',
-                                                    fontSize:'16px',
-                                                    fontWeight:'500',
-                                                    marginTop:'5px',
-                                                    
-                                                    display:'flex',
-                                                }}>
-                                                    {e.messageBody}
+                                                <div className='item-value-3'>
+                                                    {e.audienceSize}
                                                 </div>
                                             </div>
+
+                                            <div style={{
+                                                display:'flex',
+                                                flexDirection:'row',
+                                            }}>
+                                                <div className='item-titlee'>
+                                                    Sent%:
+                                                </div>
+
+                                                <div className='item-value-3'>
+                                                    {e.sentPercentage}
+                                                </div>
+                                            </div>
+
+                                            <div style={{
+                                                display:'flex',
+                                                flexDirection:'row',
+                                            }}>
+                                                <div className='item-titlee'>
+                                                    Failed%:
+                                                </div>
+
+                                                <div className='item-value-3'>
+                                                    {e.failedPercentage}
+                                                </div>
+                                            </div>
+
+                                            
 
                                             
 
@@ -326,20 +303,11 @@ const options = {
                                                 display:'flex',
                                                 flexDirection:'row'
                                             }}>
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'750',
-                                                    color:'#702cf6'
-                                                }}>
+                                                <div className='item-titlee'>
                                                     Date:
                                                 </div>
 
-                                                <div style={{
-                                                    fontSize:'15px',
-                                                    fontWeight:'600',
-                                                    marginLeft:'10px',
-                                                    marginTop:'5px'
-                                                }}>
+                                                <div className='item-value-2'>
                                                     {new Date(e.date).toLocaleString('en-US', options)};
                                                 </div>
                                             </div>

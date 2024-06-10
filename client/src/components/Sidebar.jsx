@@ -4,6 +4,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import HomeIcon from '@mui/icons-material/Home';
+import '../css/sidebar.css'
 const Sidebar = () => {
     const navigate = useNavigate()
     const [customerButton, setCustomersActive] = useState(false)
@@ -13,28 +15,39 @@ const Sidebar = () => {
 
     return(
         <>
-        <div style={{
-            width:'15%',
-            height:'100%',
-            background:'black',
-            display:'flex',
-            flexDirection:'column',
-        }}> 
+        <div className='main-boxx'> 
+
+{
+            window.location.pathname == '/' === true?
+            <div className='home-box-activee'
+            onClick={() => {navigate('/'); setCustomersActive(true)}}
+            >
+                <div style={{ color: '#00ecff' ,fontSize:'25px', cursor : 'pointer'}}>
+                    <HomeIcon/>
+                </div>
+
+                <div style={{fontSize:'20px', cursor : 'pointer',marginLeft:'20%', color:'white', fontFamily:'Roboto, Helvetica, Arial, sans-serif'}}>
+                    Home
+                </div>
+            </div>
+
+            :
+            <div className='home-box'
+            onClick={() => {navigate('/'); setCustomersActive(true)}}
+            >
+                <div style={{ color: '#00ecff' ,fontSize:'25px', cursor : 'pointer'}}>
+                    <HomeIcon/>
+                </div>
+
+                <div style={{fontSize:'20px', cursor : 'pointer',marginLeft:'20%', color:'white', fontFamily:'Roboto, Helvetica, Arial, sans-serif'}}>
+                    Home
+                </div>
+            </div>
+        }
 
         {
             window.location.pathname == '/customers' === true?
-            <div style={{
-                display:'flex',
-                flexDirection:'row',
-                paddingLeft:'8%',
-                alignItems:'center',
-                width:'100%',
-                marginTop:'3%',
-                borderBottom:'2px solid #584d4d',
-                cursor:'pointer',
-                background:'#143756'
-                
-            }}
+            <div className='home-box-activee'
             onClick={() => {navigate('/customers'); setCustomersActive(true)}}
             >
                 <div style={{ color: '#00ecff' ,fontSize:'25px', cursor : 'pointer'}}>
@@ -47,17 +60,7 @@ const Sidebar = () => {
             </div>
 
             :
-            <div style={{
-                display:'flex',
-                flexDirection:'row',
-                paddingLeft:'8%',
-                alignItems:'center',
-                width:'100%',
-                marginTop:'3%',
-                borderBottom:'2px solid #584d4d',
-                cursor:'pointer',
-                
-            }}
+            <div className='home-box'
             onClick={() => {navigate('/customers'); setCustomersActive(true)}}
             >
                 <div style={{ color: '#00ecff' ,fontSize:'25px', cursor : 'pointer'}}>
@@ -71,18 +74,8 @@ const Sidebar = () => {
         }
             
             {
-                window.location.pathname.includes('/orders') === true?
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    paddingLeft:'8%',
-                    alignItems:'center',
-                    width:'100%',
-                    marginTop:'3%',
-                    borderBottom:'2px solid #584d4d',
-                    cursor:'pointer',
-                    background:'#143756'
-                }}
+                window.location.pathname == '/orders' === true?
+                <div className='home-box-activee'
                 onClick={() => {navigate('/orders'); setOrdersActive(true)}}
                 >
                     <div style={{ color: '#00ecff' ,fontSize:'25px', cursor : 'pointer'}}>
@@ -94,17 +87,7 @@ const Sidebar = () => {
                     </div>
                 </div>
                 :
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    paddingLeft:'8%',
-                    alignItems:'center',
-                    width:'100%',
-                    marginTop:'3%',
-                    borderBottom:'2px solid #584d4d',
-                    cursor:'pointer'
-                    
-                }}
+                <div className='home-box'
                 onClick={() => {navigate('/orders'); setOrdersActive(true)}}
                 >
                     <div style={{ color: '#00ecff' ,fontSize:'25px', cursor : 'pointer'}}>
@@ -119,17 +102,7 @@ const Sidebar = () => {
             
             {
                 window.location.pathname.includes('/audiences') === true?
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    paddingLeft:'8%',
-                    alignItems:'center',
-                    width:'100%',
-                    marginTop:'3%',
-                    borderBottom:'2px solid #584d4d',
-                    cursor:'pointer',
-                    background:'#143756'
-                }}
+                <div className='home-box-activee'
                 onClick={() => {navigate('/audiences'); setAudiencesActive(true)}}
                 >
                     <div style={{ color: '#00ecff' ,fontSize:'25px', cursor : 'pointer'}}>
@@ -141,17 +114,7 @@ const Sidebar = () => {
                     </div>
                 </div>
                 :
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    paddingLeft:'8%',
-                    alignItems:'center',
-                    width:'100%',
-                    marginTop:'3%',
-                    borderBottom:'2px solid #584d4d',
-                    cursor:'pointer',
-                    
-                }}
+                <div className='home-box'
                 onClick={() => {navigate('/audiences'); setAudiencesActive(true)}}
                 >
                     <div style={{ color: '#00ecff' ,fontSize:'25px', cursor : 'pointer'}}>
@@ -166,17 +129,7 @@ const Sidebar = () => {
             
             {
                 window.location.pathname.includes('/campaigns') === true?
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    paddingLeft:'8%',
-                    alignItems:'center',
-                    width:'100%',
-                    marginTop:'3%',
-                    borderBottom:'2px solid #584d4d',
-                    cursor:'pointer',
-                    background:'#143756'
-                }}
+                <div className='home-box-activee'
                 onClick={() => {navigate('/campaigns'); setCampaignsActive(true)}}
                 >
                     <div style={{ color: '#00ecff' ,fontSize:'25px', cursor : 'pointer'}}>
@@ -188,16 +141,7 @@ const Sidebar = () => {
                     </div>
                 </div>
                 :
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    paddingLeft:'8%',
-                    alignItems:'center',
-                    width:'100%',
-                    marginTop:'3%',
-                    borderBottom:'2px solid #584d4d',
-                    cursor:'pointer'
-                }}
+                <div className='home-box'
                 onClick={() => {navigate('/campaigns'); setCampaignsActive(true)}}
                 >
                     <div style={{ color: '#00ecff' ,fontSize:'25px', cursor : 'pointer'}}>
@@ -211,16 +155,7 @@ const Sidebar = () => {
             }
             
 
-            <div style={{
-                display:'flex',
-                flexDirection:'row',
-                alignItems:'center',
-                paddingLeft:'8%',
-                width:'100%',
-                marginTop:'3%',
-                borderBottom:'2px solid #584d4d',
-                cursor:'pointer'
-            }}
+            <div className='home-box'
             onClick={() => {window.open("http://localhost:8000/auth/logout", "_self");}}
             >
                 <div style={{ color: '#00ecff' ,fontSize:'25px', cursor : 'pointer'}}>

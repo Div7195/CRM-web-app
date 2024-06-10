@@ -1,0 +1,43 @@
+.login-boxx{
+width: 400px;
+margin: auto;
+box-shadow: 5px 2px 5px 2px rgb(0 0 0 / 0.6);
+background-color: #ffffff;
+padding: 25px 35px;
+display: flex;
+flex-direction: column;
+
+}
+
+.sub-box-1{
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+background: #162029;
+border-radius: 5px;
+padding: 30px;
+text-align: center;
+
+}
+
+.google-text{
+display: flex;
+flex-direction: row;
+width: 90%;
+font-size: 20px;
+justify-content: center;
+color: #41ef1a;
+
+}
+
+.google-btn{
+text-transform: none;
+background-color: black;
+color: #41ef1a;
+height: 48px;
+border-radius: 7px;
+box-shadow: 0 2px 4px 0 rgb(0 0 0 / 20%);
+margin-top: 20px;
+
+}

@@ -56,65 +56,26 @@ const AudienceCustomers = () => {
                 Xeno Task - Mini CRM
                 </div>
             </div>
-            <div style={{
-                display:'flex',
-                flexDirection:'row',
-                width:"100vw",
-                height:'100vh'
-            }}>
+            <div className='main-box'>
 
                         <Sidebar/>
-                        <div style={{
-                        width:'85%',
-                        height:'100%',
-                        display:'flex',
-                        flexDirection:'column',
-                        alignItems:'center'
-                    }}
+                        <div className='main-content-box'
                     >
-                        
-
-                       
-                            
-                            <div style={{
-                                display:'flex',
-                                flexDirection:'column',
-                                alignItems:'center',
-                                justifyContent:'center',
-                                width:'50%',
-                                marginTop:'10px'
-                            }}>
+                            <div className='list-box'>
                                 {
                                     customers && customers.length > 0 ? 
                                     customers.map(e => (
                                         <>
-                                        <div style={{
-                                            width:'100%',
-                                            display:'flex',
-                                            flexDirection:'column',
-                                            padding:'5px',
-                                            border:'2px solid black',
-                                            borderRadius:'5px',
-                                            background:'#cee3f6',
-                                            marginTop:'10px'
-                                        }}>
+                                        <div className='list-item-box'>
                                             <div style={{
                                                 display:'flex',
                                                 flexDirection:'row'
                                             }}>
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'750',
-                                                    color:'#702cf6'
-                                                }}>
+                                                <div className='item-title'>
                                                     Name:
                                                 </div>
 
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'600',
-                                                    marginLeft:'10px'
-                                                }}>
+                                                <div className='item-value-1'>
                                                     {e.customerName}
                                                 </div>
                                             </div>
@@ -123,19 +84,11 @@ const AudienceCustomers = () => {
                                                 display:'flex',
                                                 flexDirection:'row'
                                             }}>
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'750',
-                                                    color:'#702cf6'
-                                                }}>
+                                                <div className='item-title'>
                                                     Email:
                                                 </div>
 
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'600',
-                                                    marginLeft:'10px'
-                                                }}>
+                                                <div className='item-value-1'>
                                                     {e.customerEmail}
                                                 </div>
                                             </div>
@@ -144,19 +97,11 @@ const AudienceCustomers = () => {
                                                 display:'flex',
                                                 flexDirection:'row'
                                             }}>
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'750',
-                                                    color:'#702cf6'
-                                                }}>
+                                                <div className='item-title'>
                                                     Total spend:
                                                 </div>
 
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'600',
-                                                    marginLeft:'10px'
-                                                }}>
+                                                <div className='item-value-1'>
                                                     {e.customerTotalSpend}
                                                 </div>
                                             </div>
@@ -165,19 +110,11 @@ const AudienceCustomers = () => {
                                                 display:'flex',
                                                 flexDirection:'row'
                                             }}>
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'750',
-                                                    color:'#702cf6'
-                                                }}>
+                                                <div className='item-title'>
                                                     Total visits:
                                                 </div>
 
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'600',
-                                                    marginLeft:'10px'
-                                                }}>
+                                                <div className='item-value-1'>
                                                     {e.customerTotalVisits}
                                                 </div>
                                             </div>
@@ -186,19 +123,11 @@ const AudienceCustomers = () => {
                                                 display:'flex',
                                                 flexDirection:'row'
                                             }}>
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'750',
-                                                    color:'#702cf6'
-                                                }}>
+                                                <div className='item-title'>
                                                     Last visit date:
                                                 </div>
 
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'600',
-                                                    marginLeft:'10px'
-                                                }}>
+                                                <div className='item-value-1'>
                                                     {new Date(e.lastVisitDate).toLocaleString('en-US', options)};
                                                 </div>
                                             </div>

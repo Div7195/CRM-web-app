@@ -17,7 +17,7 @@ export const addNewOrderController = async (request, response) => {
     try {
         const { customerId, orderTotalAmount } = request.body;
     
-        // Input data validation
+        
         if (!customerId || !orderTotalAmount) {
           return res.status(400).json({ error: 'Customer ID and Order Amount are required' });
         }
@@ -28,10 +28,10 @@ export const addNewOrderController = async (request, response) => {
         });
         
         response.status(202).json({ message: 'Order creation request received' });
-         // Ensuring the connection closes after sending the response
+        
       } catch (err) {
         response.status(500).json({ error: err.message });
-          // Ensuring the connection closes after sending the response
+          
       }
 }
 
@@ -57,6 +57,8 @@ export const getOrdersController = async(req, res) => {
       await connection.close();  
     }, { noAck: false });
   } catch (error) {
+    await channel.close();
+      await connection.close();  
     res.status(500).json({ error: error.message });
   }
 }

@@ -1,11 +1,16 @@
 import '../css/campaigns.css'
 import Sidebar from './Sidebar'
 import { useState } from 'react';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-
-const AudienceCampaigns = () => {
+import CampaignIcon from '@mui/icons-material/Campaign';
+import { useNavigate, useParams } from 'react-router-dom';
+const CustomerCampaigns = () => {
+    const navigate = useNavigate()
     const {customerId} = useParams()
+    const isoTimestamp = '2024-06-07T13:41:09.063Z';
+const date = new Date(isoTimestamp);
+
 const options = {
   weekday: 'long',
   year: 'numeric',
@@ -54,7 +59,6 @@ const options = {
     }
 
 
-    
       
       useEffect(() => {
         
@@ -64,12 +68,16 @@ const options = {
             method: 'GET',
             credentials: "include",
             };
+            const url2 = "http://localhost:8000/getAllAudiences"
         
         try {
             const fetchResponse = await fetch(url1, settings);
             const response = await fetchResponse.json();
             setCampaigns(response.campaigns)
-
+            const fetchResponse2 = await fetch(url2, settings);
+            const response2 = await fetchResponse2.json();
+            console.log(response2.audiences)
+            setAudiences(response2.audiences)
             } catch (e) {
             console.log(e);
             }
@@ -95,11 +103,11 @@ const options = {
             <div className='main-box'>
 
                         <Sidebar/>
-                        <div className='main-content-box'>
+                        <div className='main-content-box'
+                    >
                         
-
                             
-                        <div className='list-box'>
+                            <div className='list-box'>
                                 {
                                     campaigns && campaigns.length > 0 ? 
                                     campaigns.map(e => (
@@ -237,7 +245,6 @@ const options = {
                             </div>
 
 
-
                         
 
                         
@@ -250,6 +257,4 @@ const options = {
     )
 }
 
-export default AudienceCampaigns
-
-
+export default CustomerCampaigns

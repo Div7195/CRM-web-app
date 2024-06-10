@@ -1,0 +1,33 @@
+.main-boxx{
+width: 15%;
+height: 100%;
+background: black;
+display: flex;
+flex-direction: column;
+
+}
+
+.home-box-activee{
+display: flex;
+flex-direction: row;
+padding-left: 8%;
+align-items: center;
+width: 100%;
+margin-top: 3%;
+border-bottom: 2px solid #584d4d;
+cursor: pointer;
+background: #143756;
+
+}
+.home-box{
+display: flex;
+flex-direction: row;
+padding-left: 8%;
+align-items: center;
+width: 100%;
+margin-top: 3%;
+border-bottom: 2px solid #584d4d;
+cursor: pointer;
+
+
+}

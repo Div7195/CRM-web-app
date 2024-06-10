@@ -178,6 +178,7 @@ const options = {
             }
          });
             setIsPopupVisible(false)
+            navigate('/campaigns')
              
          } catch (e) {
             //  setError('Something went wrong, please try again later');
@@ -245,21 +246,10 @@ const options = {
                 Xeno Task - Mini CRM
                 </div>
             </div>
-            <div style={{
-                display:'flex',
-                flexDirection:'row',
-                width:"100vw",
-                height:'100vh'
-            }}>
+            <div className='main-box'>
 
                         <Sidebar/>
-                        <div style={{
-                        width:'85%',
-                        height:'100%',
-                        display:'flex',
-                        flexDirection:'column',
-                        alignItems:'center'
-                    }}
+                        <div className='sub-box'
                     >
                         <div className='choose-button' onClick={() => {openAddForm()}}>
                                 <AddCircleIcon style={{
@@ -369,12 +359,7 @@ const options = {
                                 {
                                     audienceSize !== ""?
                                     <>
-                                    <div style={{
-                                        width:'100%',
-                                        fontSize:'20px',
-                                        fontWeight:'600',
-                                        textAlign:'center'
-                                    }}>
+                                    <div className='audience-size{'>
                                         Audience Size is {audienceSize}
                                     </div>
                                     </>
@@ -390,46 +375,22 @@ const options = {
                             </div>
                         </div>
                             
-                            <div style={{
-                                display:'flex',
-                                flexDirection:'column',
-                                alignItems:'center',
-                                justifyContent:'center',
-                                width:'50%',
-                                marginTop:'10px'
-                            }}>
+                            <div className='list-box'>
                                 {
                                     audiences && audiences.length > 0 ? 
                                     audiences.map(e => (
                                         <>
-                                        <div style={{
-                                            width:'100%',
-                                            display:'flex',
-                                            flexDirection:'column',
-                                            padding:'5px',
-                                            border:'2px solid black',
-                                            borderRadius:'5px',
-                                            background:'#cee3f6',
-                                            marginTop:'10px'
-                                        }}>
+                                        <div className='list-item-box'>
 
                                             <div style={{
                                                 display:'flex',
                                                 flexDirection:'row'
                                             }}>
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'750',
-                                                    color:'#702cf6'
-                                                }}>
+                                                <div className='item-title-1'>
                                                    Title:
                                                 </div>
 
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'600',
-                                                    marginLeft:'10px'
-                                                }}>
+                                                <div className='item-value-1'>
                                                     {e.name}
                                                 </div>
                                             </div>
@@ -437,19 +398,11 @@ const options = {
                                                 display:'flex',
                                                 flexDirection:'row'
                                             }}>
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'750',
-                                                    color:'#702cf6'
-                                                }}>
+                                                <div className='item-title-1'>
                                                     Description:
                                                 </div>
 
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'600',
-                                                    marginLeft:'10px'
-                                                }}>
+                                                <div className='item-value-1'>
                                                     {e.description}
                                                 </div>
                                             </div>
@@ -459,57 +412,25 @@ const options = {
                                                 flexDirection:'row'
                                             }}>
 
-                                                <div style={{
-                                                    fontSize:'20px',
-                                                    fontWeight:'750',
-                                                    color:'#702cf6'
-                                                }}>
+                                                <div className='item-title-1'>
                                                     Criteria:
                                                 </div>
 
-                                                <div style={{
-                                                    display:'flex',
-                                                    flexDirection:'row',
-                                                    justifyContent:'space-between',
-                                                    width:'85%',
-                                                    marginLeft:'10px'
-                                                }}>
+                                                <div className='criteria-box'>
                                                    <div style={{
                                                         display:'flex',
                                                         flexDirection:'column'
                                                    }}>
-                                                        <div style={{
-                                                            display:'flex',
-                                                            flexDirection:'column',
-                                                            alignItems:'center',
-                                                            borderRadius:'5px',
-                                                            color:'#12ae70',
-                                                            textAlign:'center',
-                                                            background:'#1d1d25',
-                                                            padding:'5px'
-                                                        }}>
+                                                        <div className='criteria-title-1'>
                                                             Min total spend
                                                         </div>
 
-                                                        <div style={{
-                                                            textAlign:'center',
-                                                            background:'#abd0f1',
-                                                            borderRadius:'0px 0px 5px 5px',
-                                                            color:'rgb(124 13 192)',
-                                                            fontWeight:'650'
-                                                        }}>
+                                                        <div className='criteria-value-1'>
                                                             {e.criteria.minTotalSpend}
                                                         </div>
                                                    </div>
 
-                                                   <div style={{
-                                                        display:'flex',
-                                                        alignItems:'center',
-                                                        justifyContent:'center',
-                                                        fontSize:'20px',
-                                                        fontWeight:'800',
-                                                        color:'#6378f5'
-                                                   }}>
+                                                   <div className='operator-1'>
                                                         {e.criteria.operator1}
                                                    </div>
 
@@ -517,38 +438,16 @@ const options = {
                                                         display:'flex',
                                                         flexDirection:'column'
                                                    }}>
-                                                        <div style={{
-                                                            display:'flex',
-                                                            flexDirection:'column',
-                                                            alignItems:'center',
-                                                            borderRadius:'5px',
-                                                            color:'#12ae70',
-                                                            textAlign:'center',
-                                                            background:'#1d1d25',
-                                                            padding:'5px'
-                                                        }}>
+                                                        <div className='criteria-title-1'>
                                                             Min total visits
                                                         </div>
 
-                                                        <div style={{
-                                                            textAlign:'center',
-                                                            background:'#abd0f1',
-                                                            borderRadius:'0px 0px 5px 5px',
-                                                            color:'rgb(124 13 192)',
-                                                            fontWeight:'650'
-                                                        }}>
+                                                        <div className='criteria-value-1'>
                                                             {e.criteria.minTotalVisits}
                                                         </div>
                                                    </div>
 
-                                                    <div style={{
-                                                        display:'flex',
-                                                        alignItems:'center',
-                                                        justifyContent:'center',
-                                                        fontSize:'20px',
-                                                        fontWeight:'800',
-                                                        color:'#6378f5'
-                                                   }}>
+                                                    <div className='operator-1'>
                                                         {e.criteria.operator2}
                                                    </div>
 
@@ -556,26 +455,11 @@ const options = {
                                                         display:'flex',
                                                         flexDirection:'column'
                                                    }}>
-                                                        <div style={{
-                                                            display:'flex',
-                                                            flexDirection:'column',
-                                                            alignItems:'center',
-                                                            borderRadius:'5px',
-                                                            color:'#12ae70',
-                                                            textAlign:'center',
-                                                            background:'#1d1d25',
-                                                            padding:'5px'
-                                                        }}>
+                                                        <div className='criteria-title-1'>
                                                             Last unvisited months
                                                         </div>
 
-                                                        <div style={{
-                                                            textAlign:'center',
-                                                            background:'#abd0f1',
-                                                            borderRadius:'0px 0px 5px 5px',
-                                                            color:'rgb(124 13 192)',
-                                                            fontWeight:'650'
-                                                        }}>
+                                                        <div className='criteria-value-1'>
                                                             {e.criteria.lastMonthsNotVisited}
                                                         </div>
                                                    </div>
@@ -585,31 +469,19 @@ const options = {
                                                 
                                             </div>
 
-                                            <div style={{
-                                                display:'flex',
-                                                flexDirection:'row',
-                                                justifyContent:'space-between',
-                                                marginTop:'2%'
-                                            }}>
-                                                <div style={{width:'30%', borderRadius:'5px', cursor:'pointer', color:'white', background:'#333367', padding:'5px', textAlign:'center'}} onClick={() => {navigate(`/audience/${e._id}/customers`)}}>
+                                            <div className='btns-box'>
+                                                <div className='bottom-btn' onClick={() => {navigate(`/audience/${e._id}/customers`)}}>
                                                     Get customers
                                                 </div>
 
-                                                <div style={{width:'30%', borderRadius:'5px', cursor:'pointer', color:'white', background:'#333367', padding:'5px', textAlign:'center'}} onClick={() => {openAddFormSecond( e._id, e.name)}}>
+                                                <div className='bottom-btn' onClick={() => {openAddFormSecond( e._id, e.name)}}>
                                                     Send a campaign
                                                 </div>
 
-                                                <div style={{width:'30%', borderRadius:'5px', cursor:'pointer', color:'white', background:'#333367', padding:'5px', textAlign:'center'}}onClick={() => {navigate(`/audience/${e._id}/commslog`)}}>
+                                                <div className='bottom-btn' onClick={() => {navigate(`/audience/${e._id}/commslog`)}}>
                                                     Get comms log
                                                 </div>
                                             </div>
-
-                                            
-
-                                            
-
-                                            
-
                                             
                                         </div>
                                         </>

@@ -16,3 +16,36 @@
       display: flex;
       justify-content: center;
   }
+
+
+
+  .boxx{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+}
+.sub-boxx{
+    display: flex;
+    flex-direction: column;
+    height: 250px;
+    background: #97a0d8;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+    font-family: 'DM Sans', sans-serif;
+    background-color: #ffd3c5;
+}
+
+
+.classA{
+  display: flex;flex-direction: row;width: 100vw;height: 90vh;
+}
+
+.classB{
+  width: 85%;height: 100%;display: flex;flex-direction: column;
+}
+
+.classC{
+  object-fit: cover;display: flex;justify-content: center;margin-top: 2%;
+}

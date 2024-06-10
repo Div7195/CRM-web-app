@@ -18,7 +18,7 @@ router.post('/sendEmails', sendEmailsController);
 router.get('/getAllCampaigns', getCampaignsController);
 router.get('/getAllAudiences', getAllAudiencesController);
 router.get('/getSingleAudience/:audienceId', getAllAudiencesController);
-router.post('/getDeliveryReceipts', getSingleAudience);
+router.post('/getDeliveryReceipts', deliveryReceiptController);
 // router.post('/login', loginUserController);
 
 export default router;

@@ -10,7 +10,7 @@ export const addCustomerController = async (request, response) => {
     try {
         const { customerName, customerEmail } = request.body;
     
-        // Input data validation
+        
         if (!customerName || !customerEmail) {
           return res.status(400).json({ error: 'Name and Email are required' });
         }
@@ -29,7 +29,7 @@ export const addCustomerController = async (request, response) => {
         setTimeout(() => {
           channel.close();
           connection.close();
-        }, 500);  // Ensuring the connection closes after sending the response
+        }, 500);  
       } catch (err) {
         response.status(500).json({ error: err.message });
       }
@@ -122,14 +122,12 @@ export const sendEmailsController = async(req, res) => {
       persistent: true,
     });
 
-    channel.consume(responseQueue, (msg) => {
+    channel.consume(responseQueue, async(msg) => {
       const result = JSON.parse(msg.content.toString());
       res.status(200).json(result);
       channel.ack(msg);
-      setTimeout(() => {
-        channel.close();
-        connection.close();
-      }, 500);  
+      await channel.close();
+      await connection.close();
     }, { noAck: false });
 
   } catch (error) {
@@ -144,12 +142,26 @@ export const getCampaignsController = async(req, res) => {
     const responseQueue = 'responseQueue4';
 
     await channel.assertQueue(responseQueue, { durable: true });
-    const audienceId = req.query.audienceId
-    const filterRequest = { responseQueue, audienceId };
     
-    channel.sendToQueue('getCampaignsQueue', Buffer.from(JSON.stringify(filterRequest)), {
+    if(req.query.audienceId && req.query.audienceId !== ""){
+      const audienceId = req.query.audienceId
+      const customerId = ""
+      const filterRequest = { responseQueue, audienceId, customerId  };
+      console.log(filterRequest) 
+      channel.sendToQueue('getCampaignsQueue', Buffer.from(JSON.stringify(filterRequest)), {
       persistent: true,
     });
+    }else if(req.query.customerId && req.query.customerId !== ""){
+      const customerId = req.query.customerId
+      const audienceId = ""
+      const filterRequest = { responseQueue, audienceId, customerId  };
+      console.log(filterRequest) 
+      channel.sendToQueue('getCampaignsQueue', Buffer.from(JSON.stringify(filterRequest)), {
+      persistent: true,
+    });
+    }
+    
+    
 
     channel.consume(responseQueue, async(msg) => {
       const result = JSON.parse(msg.content.toString());
@@ -164,9 +176,9 @@ export const getCampaignsController = async(req, res) => {
   }
 }
 
-export const deliveryReceiptController = async(req, res) => {
+export const deliveryReceiptController = async (req, res) => {
   try {
-    console.log(req.body)
+    console.log(req.body);
     const { campaignId } = req.body;
     const campaign = await Campaign.findById(campaignId);
     if (!campaign) {
@@ -184,17 +196,29 @@ export const deliveryReceiptController = async(req, res) => {
         status
       };
     });
+
+    const sentCount = deliveryReceipts.filter(receipt => receipt.status === 'SENT').length;
+    const failedCount = deliveryReceipts.filter(receipt => receipt.status === 'FAILED').length;
+    const totalCount = deliveryReceipts.length;
+
+    const sentPercentage = (sentCount / totalCount) * 100;
+    const failedPercentage = (failedCount / totalCount) * 100;
+
     await DeliveryReceipt.create({
       campaignId,
       customerReceipts: deliveryReceipts
     });
 
-    res.status(201).json({ message: 'Delivery receipts created successfully' });
+    res.status(201).json({
+      message: 'Delivery receipts created successfully',
+      sentPercentage: sentPercentage.toFixed(2),
+      failedPercentage: failedPercentage.toFixed(2)
+    });
   } catch (error) {
     console.error('Error creating delivery receipts:', error);
     res.status(500).json({ error: 'Error creating delivery receipts' });
   }
-}
+};
 
 export const getAllAudiencesController = async(req, res) => {
   try {

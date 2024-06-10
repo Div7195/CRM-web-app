@@ -8,6 +8,7 @@ import Audience from './models/audience-model.js';
 import nodemailer from 'nodemailer';
 import Campaign from './models/campaign-schema.js';
 import axios from 'axios'
+import DeliveryReceipt from './models/commslog-schema.js';
 
 dotenv.config()
 const PORT = process.env.PORT || 8000;
@@ -299,8 +300,16 @@ dbConnection(USERNAME, PASSWORD);
           messageBody
         });
         await campaign.save();
-        await axios.post('http://localhost:8000/getDeliveryReceipts', { campaignId: campaign._id });
-        channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ msg:'emails sent successfully with 90% receipt rate, campaign saved' })));
+        const response = await axios.post('http://localhost:8000/getDeliveryReceipts', { campaignId:campaign._id });
+        const { sentPercentage, failedPercentage } = response.data;
+
+        const message = {
+            msg: 'Emails sent successfully with delivery receipt rates.',
+            sentPercentage: sentPercentage,
+            failedPercentage: failedPercentage,
+            audienceSize:list.customers.length
+        };
+        channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify(message)));
       channel.ack(msg);
       } catch (error) {
         console.error('Error sending emails:', error);
@@ -311,31 +320,60 @@ dbConnection(USERNAME, PASSWORD);
 
 
   channel.consume('getCampaignsQueue', async (msg) => {
-    const { responseQueue, audienceId } = JSON.parse(msg.content.toString());
+    const { responseQueue, audienceId, customerId } = JSON.parse(msg.content.toString());
     try {
-      let campaigns = []
-      if(audienceId === "nil"){
-        campaigns = await Campaign.find().sort({ date: -1 });
+        let campaigns = [];
+
+      if(audienceId !== ""){
+        if(audienceId === "nil"){
+          campaigns = await Campaign.find().sort({ date: -1 });
+        }else{
+          campaigns = await Campaign.find({ audienceId }).sort({ date: -1 });
+        }
+      }else if(customerId !== ""){
+        if(customerId === "nil"){
+          campaigns = await Campaign.find().sort({ date: -1 });
+        }else{
+          const audiences = await Audience.find({ customers: customerId });
+        const audienceIds = audiences.map(audience => audience._id);
+        campaigns = await Campaign.find({ audienceId: { $in: audienceIds } }).sort({ date: -1 });
+        }
       }else{
-        campaigns = await Campaign.find({ audienceId }).sort({ date: -1 });
+        campaigns = await Campaign.find().sort({ date: -1 });
       }
-      const campaignsWithAudienceNames = await Promise.all(campaigns.map(async (campaign) => {
-        const audience = await Audience.findById(campaign.audienceId);
-        const audienceName = audience ? audience.name : 'Unknown Audience';
-        return {
-            ...campaign.toObject(),
-            audienceName
-        };
-    }));
-    channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ campaigns:campaignsWithAudienceNames })));
+
+        const campaignsWithDetails = await Promise.all(campaigns.map(async (campaign) => {
+            const audience = await Audience.findById(campaign.audienceId);
+            const audienceName = audience ? audience.name : 'Unknown Audience';
+
+            const deliveryReceipt = await DeliveryReceipt.findOne({ campaignId: campaign._id });
+            let sentPercentage = 0;
+            let failedPercentage = 0;
+            if (deliveryReceipt) {
+                const totalReceipts = deliveryReceipt.customerReceipts.length;
+                const sentCount = deliveryReceipt.customerReceipts.filter(receipt => receipt.status === 'SENT').length;
+                const failedCount = deliveryReceipt.customerReceipts.filter(receipt => receipt.status === 'FAILED').length;
+                sentPercentage = totalReceipts > 0 ? (sentCount / totalReceipts) * 100 : 0;
+                failedPercentage = totalReceipts > 0 ? (failedCount / totalReceipts) * 100 : 0;
+            }
+
+            return {
+                ...campaign.toObject(),
+                audienceName,
+                sentPercentage,
+                failedPercentage,
+                audienceSize: audience ? audience.customers.length : 0
+            };
+        }));
+
+        channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ campaigns: campaignsWithDetails })));
         channel.ack(msg);
     } catch (error) {
-      console.error('Error fetching campaigns:', error);
-      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Error fetching campaigns' })));
-      channel.ack(msg);
-      
+        console.error('Error fetching campaigns:', error);
+        channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Error fetching campaigns' })));
+        channel.ack(msg);
     }
-  }, { noAck: false });
+}, { noAck: false });
 
   channel.consume('getAudiencesQueue', async (msg) => {
     const { responseQueue } = JSON.parse(msg.content.toString());

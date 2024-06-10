@@ -3,8 +3,9 @@ import Sidebar from './Sidebar'
 import { useState } from 'react';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect } from 'react';
-const Orders = () => {
-
+import { useParams } from 'react-router-dom';
+const CustomerOrders = () => {
+const {customerId} = useParams()
 const options = {
   weekday: 'long',
   year: 'numeric',
@@ -44,52 +45,22 @@ const options = {
         console.log(newOrder)
     }
 
-
-      const addNewOrderApi = async() =>{
-        
-        const settings = {
-         method: "POST",
-         body: JSON.stringify(newOrder),
-         headers: {
-             "Content-type": "application/json; charset=UTF-8"
-         },
-         credentials: "include",
-         }
-         try {
-             console.log(settings.body)
-             const fetchResponse = await fetch(`http://localhost:8000/addOrder`, settings);
-             const response = await fetchResponse.json();
-             setNewOrder({
-                customerId:'',
-                orderTotalAmount:'',
-                
-            });
-            setIsPopupVisible(false)
-             
-         } catch (e) {
-            //  setError('Something went wrong, please try again later');
-             return e;
-         }    
-     }
       
       useEffect(() => {
         
         const myFunction = async() => {
-            const url1 = `http://localhost:8000/getOrders?customer=all`;
+            const url1 = `http://localhost:8000/getOrders?customer=${customerId}`;
             const settings = {
             method: 'GET',
             credentials: "include",
             };
-            const url2 = "http://localhost:8000/getCustomers"
+            
         
         try {
             const fetchResponse = await fetch(url1, settings);
             const response = await fetchResponse.json();
             setOrders(response.result)
-            const fetchResponse2 = await fetch(url2, settings);
-            const response2 = await fetchResponse2.json();
-            console.log(response2.customers)
-            setCustomers(response2.customers)
+            
             } catch (e) {
             console.log(e);
             }
@@ -117,56 +88,7 @@ const options = {
                         <Sidebar/>
                         <div className='main-content-box'
                     >
-                        <div className='choose-button' onClick={() => {openAddForm()}}>
-                                <AddCircleIcon style={{
-                                fontSize:"40px",
-                                
-                              }}
-                              />  Add an order
-                        </div>
-
-                        <div onClick={(e) => {closeAddForm(e)}}>
-                        <div className={`popup-container ${isPopupVisible ? 'show' : ''}`} >
-                            <div className="form-container" onClick={(e) => e.stopPropagation()}>
-                                <h2 style={{ fontFamily: 'AktivGrotesk-Bold',  textAlign:'center' }}>Add a new order</h2>
-                                <form >
-                                
-                                <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                                    <select className='fname' placeholde="Select customer" name='customerId' id='fname' onChange={(e)=>{onSelectValueChange(e)}} >
-
-                                        {
-                                            customers && customers.length > 0?
-                                            customers.map(e => (
-                                                <>
-                                            <option style={{
-                                                background:'white',
-                                                color:'black',
-                                            }}
-                                            
-                                            value={e._id}
-                                            >
-                                                {`${e.customerName} - ID:${e._id}`}
-                                            </option>
-                                            </>
-                                            ))
-                                            
-
-                                            :
-                                            <></>
-                                        }
-                                    </select>
-                                        
-                                        
-
-                                    {/* <input className="fname"  placeholder="Enter customer id*" type="text" name="customerId" id='fname' onChange={(e) => {onValueChange(e)}} /> */}
-                                    <input className="lname" placeholder="Enter total amount*" type="number" name="orderTotalAmount" id='lname'onChange={(e) => {onValueChange(e)}}/>
-                                </div>
-                                
-                                <div className='btn' onClick={addNewOrderApi}>Add order</div>
-                                </form>
-                            </div>
-                            </div>
-                        </div>
+                       
                             
                             <div className='list-box'>
                                 {
@@ -269,4 +191,4 @@ const options = {
     )
 }
 
-export default Orders
+export default CustomerOrders
