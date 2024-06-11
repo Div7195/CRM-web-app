@@ -32,16 +32,14 @@ const options = {
             method: 'GET',
             credentials: "include",
             };
-            const url2 = "http://localhost:8000/getAllAudiences"
         
         try {
             const fetchResponse = await fetch(url1, settings);
             const response = await fetchResponse.json();
             setCampaigns(response.campaigns)
-            const fetchResponse2 = await fetch(url2, settings);
-            const response2 = await fetchResponse2.json();
-            console.log(response2.audiences)
-            setAudiences(response2.audiences)
+            
+           
+            
             } catch (e) {
             console.log(e);
             }
