@@ -101,39 +101,6 @@ export const saveAudienceController = async (req, res) => {
   }
 };
 
-// export const sendEmailsController = async(req, res) => {
-//   try {
-//     const { audienceId, subject, messageBody } = req.body;
-    
-    
-//     if(!audienceId || !subject || !messageBody){
-//       return res.status(400).json({msg:'missing important fields'})
-//     }
-
-//     const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
-//     const channel = await connection.createChannel();
-//     const responseQueue = 'responseQueue3';
-
-//     await channel.assertQueue(responseQueue, { durable: true });
-
-//     const filterRequest = { audienceId, subject, messageBody, responseQueue };
-    
-//     channel.sendToQueue('sendEmailsQueue', Buffer.from(JSON.stringify(filterRequest)), {
-//       persistent: true,
-//     });
-
-//     channel.consume(responseQueue, async(msg) => {
-//       const result = JSON.parse(msg.content.toString());
-//       res.status(200).json(result);
-//       channel.ack(msg);
-//       await channel.close();
-//       await connection.close();
-//     }, { noAck: false });
-
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// }
 
 export const sendEmailsController = async(req, res) => {
   try {
