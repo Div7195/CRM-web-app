@@ -45,6 +45,7 @@ let channel;
 (async () => {
     try {
         const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
+        console.log(connection)
         channel = await connection.createChannel();
         await channel.assertQueue('customerQueue', { durable: true });
   await channel.assertQueue('orderQueue', { durable: true });
