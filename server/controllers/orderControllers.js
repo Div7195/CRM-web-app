@@ -6,7 +6,7 @@ let channel;
     try {
         
     
-  const connection = await amqp.connect('amqp://127.0.0.1');
+  const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
   channel = await connection.createChannel();
   await channel.assertQueue('orderQueue', { durable: true });
 } catch (error) {
@@ -37,7 +37,7 @@ export const addNewOrderController = async (request, response) => {
 
 export const getOrdersController = async(req, res) => {
   try {
-    const connection = await amqp.connect('amqp://localhost');
+    const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
     const channel = await connection.createChannel();
     const responseQueue = 'responseQueue8';
 

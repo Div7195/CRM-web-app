@@ -19,7 +19,7 @@ dbConnection(USERNAME, PASSWORD);
     
     // console.log('wow')
     
-  const connection = await amqp.connect('amqp://127.0.0.1');
+  const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
   const channel = await connection.createChannel();
   // console.log(channel)
   await channel.assertQueue('customerQueueee', { durable: true });

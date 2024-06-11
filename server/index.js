@@ -44,7 +44,7 @@ const server = app.listen(PORT, () => console.log(`server is running on port ${P
 let channel;
 (async () => {
     try {
-        const connection = await amqp.connect('amqp://127.0.0.1');
+        const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
         channel = await connection.createChannel();
         await channel.assertQueue('customerQueue', { durable: true });
   await channel.assertQueue('orderQueue', { durable: true });

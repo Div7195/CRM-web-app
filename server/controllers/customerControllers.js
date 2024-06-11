@@ -14,7 +14,7 @@ export const addCustomerController = async (request, response) => {
         if (!customerName || !customerEmail) {
           return res.status(400).json({ error: 'Name and Email are required' });
         }
-        const connection = await amqp.connect('amqp://localhost');
+        const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
         const channel = await connection.createChannel();
         const responseQueue = 'responseQueueee2';
 
@@ -41,7 +41,7 @@ export const checkAudienceSizeController = async (req, res) => {
     console.log(req.body)
     
 
-    const connection = await amqp.connect('amqp://localhost');
+    const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
     const channel = await connection.createChannel();
     
     const responseQueue = 'responseQueue';
@@ -76,7 +76,7 @@ export const saveAudienceController = async (req, res) => {
     
     
 
-    const connection = await amqp.connect('amqp://localhost');
+    const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
     const channel = await connection.createChannel();
     const responseQueue = 'responseQueue2';
 
@@ -110,7 +110,7 @@ export const saveAudienceController = async (req, res) => {
 //       return res.status(400).json({msg:'missing important fields'})
 //     }
 
-//     const connection = await amqp.connect('amqp://localhost');
+//     const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
 //     const channel = await connection.createChannel();
 //     const responseQueue = 'responseQueue3';
 
@@ -144,7 +144,7 @@ export const sendEmailsController = async(req, res) => {
       return res.status(400).json({msg:'missing important fields'})
     }
 
-    const connection = await amqp.connect('amqp://localhost');
+    const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
     const channel = await connection.createChannel();
     const responseQueue = 'responseQueue3';
 
@@ -188,7 +188,7 @@ export const updateDeliveryReceiptController = async (req, res) => {
   try {
     const { campaignId, customerId } = req.body;
 
-    const connection = await amqp.connect('amqp://localhost');
+    const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
     const channel = await connection.createChannel();
     await channel.assertQueue('updateDeliveryReceiptQueue', { durable: true });
     
@@ -208,7 +208,7 @@ export const updateDeliveryReceiptController = async (req, res) => {
 
 export const getCampaignsController = async(req, res) => {
   try {
-    const connection = await amqp.connect('amqp://localhost');
+    const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
     const channel = await connection.createChannel();
     const responseQueue = 'responseQueue4';
 
@@ -293,7 +293,7 @@ export const deliveryReceiptController = async (req, res) => {
 
 export const getAllAudiencesController = async(req, res) => {
   try {
-    const connection = await amqp.connect('amqp://localhost');
+    const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
     const channel = await connection.createChannel();
     const responseQueue = 'responseQueue5';
 
@@ -320,7 +320,7 @@ export const getAllAudiencesController = async(req, res) => {
 export const getSingleAudience = async(req, res) => {
   try {
     const{audienceId} = req.params
-    const connection = await amqp.connect('amqp://localhost');
+    const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
     const channel = await connection.createChannel();
     const responseQueue = 'responseQueue6';
 
@@ -349,7 +349,7 @@ export const getSingleAudience = async(req, res) => {
 export const getCustomersController = async(req, res) => {
 
   try {
-    const connection = await amqp.connect('amqp://localhost');
+    const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
     const channel = await connection.createChannel();
     const responseQueue = 'responseGetCustomerssss1';
 
