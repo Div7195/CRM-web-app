@@ -7,7 +7,7 @@ import dotenv from 'dotenv'
 import Audience from './models/audience-model.js';
 import Campaign from './models/campaign-schema.js';
 import axios from 'axios'
-import DeliveryReceipt from './models/commslog-schema.js';
+import CommsLogs from './models/commslog-schema.js';
 
 dotenv.config()
 const PORT = process.env.PORT || 8000;
@@ -39,8 +39,6 @@ dbConnection(USERNAME, PASSWORD);
 
     const batchUpdate = async () => {
       try {
-        
-      
       if (updateBatch && updateBatch.length > 0) {
         const batch = [...updateBatch];
         updateBatch = [];
@@ -53,7 +51,7 @@ dbConnection(USERNAME, PASSWORD);
           }
         }));
         console.log(bulkOps)
-        await DeliveryReceipt.bulkWrite(bulkOps);
+        await CommsLogs.bulkWrite(bulkOps);
         console.log('Batch update complete');
       }
     } catch (error) {
@@ -61,7 +59,7 @@ dbConnection(USERNAME, PASSWORD);
     }
     };
 
-  // setInterval(batchUpdate, batchUpdateInterval);
+  setInterval(batchUpdate, batchUpdateInterval);
   channel.consume('customerQueueee', async (msg) => {
     try {
         
@@ -336,6 +334,7 @@ dbConnection(USERNAME, PASSWORD);
         channel.ack(msg);
       } catch (error) {
         console.error('Error processing message:', error);
+        
         channel.reject(msg, true);
       }
     }, { noAck: false });
@@ -370,7 +369,7 @@ dbConnection(USERNAME, PASSWORD);
             const audience = await Audience.findById(campaign.audienceId);
             const audienceName = audience ? audience.name : 'Unknown Audience';
 
-            const deliveryReceipt = await DeliveryReceipt.findOne({ campaignId: campaign._id });
+            const deliveryReceipt = await CommsLogs.findOne({ campaignId: campaign._id });
             let sentPercentage = 0;
             let failedPercentage = 0;
             if (deliveryReceipt) {
@@ -384,8 +383,8 @@ dbConnection(USERNAME, PASSWORD);
             return {
                 ...campaign.toObject(),
                 audienceName,
-                sentPercentage,
-                failedPercentage,
+                sentPercentage:Math.round((sentPercentage * 100) / 100),
+                failedPercentage:Math.round((failedPercentage * 100) / 100),
                 audienceSize: audience ? audience.customers.length : 0
             };
         }));
@@ -413,19 +412,6 @@ dbConnection(USERNAME, PASSWORD);
     }
   }, { noAck: false });
 
-  channel.consume('getSingleAudienceQueue', async (msg) => {
-    const { responseQueue, audienceId } = JSON.parse(msg.content.toString());
-    try {
-     
-      const campaigns = await Campaign.find().sort({ date: -1 });
-      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ campaigns })));
-      channel.ack(msg);
-    } catch (error) {
-      console.error('Error fetching campaigns:', error);
-      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Error fetching campaigns' })));
-      channel.ack(msg);
-    }
-  }, { noAck: false });
 
 
   channel.consume('getCustomerssssQueue', async (msg) => {
@@ -468,7 +454,7 @@ dbConnection(USERNAME, PASSWORD);
       let orders = []
       let result = []
       if(customer === 'all'){
-         orders = await Order.find().sort({ date: -1 });
+         orders = await Order.find().sort({ orderDateStamp: -1 });
          result = await Promise.all(
           orders.map(async (order) => {
             const customerObj = await Customer.findById(order.customerId);

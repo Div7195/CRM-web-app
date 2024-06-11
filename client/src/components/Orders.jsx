@@ -59,6 +59,7 @@ const options = {
              console.log(settings.body)
              const fetchResponse = await fetch(`http://localhost:8000/addOrder`, settings);
              const response = await fetchResponse.json();
+             setOrders([newOrder, ...orders])
              setNewOrder({
                 customerId:'',
                 orderTotalAmount:'',

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const deliveryReceiptSchema = new mongoose.Schema({
+const commsLogs = new mongoose.Schema({
   campaignId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Campaign',
@@ -20,6 +20,6 @@ const deliveryReceiptSchema = new mongoose.Schema({
   }]
 });
 
-const DeliveryReceipt = mongoose.model('DeliveryReceipt', deliveryReceiptSchema);
+const CommsLogs = mongoose.model('CommsLog', commsLogs);
 
-export default DeliveryReceipt;
+export default CommsLogs;

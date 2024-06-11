@@ -2,7 +2,7 @@ import Customer from "../models/customer-schema.js";
 import Order from "../models/order-schema.js";
 import amqp from 'amqplib';
 import Audience from "../models/audience-model.js";
-import DeliveryReceipt from "../models/commslog-schema.js";
+import CommsLogs from "../models/commslog-schema.js";
 import Campaign from "../models/campaign-schema.js";
 import axios from "axios";
 
@@ -25,7 +25,7 @@ export const addCustomerController = async (request, response) => {
           persistent: true,
         });
     
-        response.status(202).json({ message: 'Customer creation request received' });
+        response.status(200).json({ message: 'Customer creation request received' });
         setTimeout(() => {
           channel.close();
           connection.close();
@@ -210,6 +210,8 @@ export const getCampaignsController = async(req, res) => {
     }, { noAck: false });
       
   } catch (error) {
+    await channel.close();
+      await connection.close();
     res.status(500).json({ error: error.message });
   }
 }
@@ -242,7 +244,7 @@ export const deliveryReceiptController = async (req, res) => {
     const sentPercentage = (sentCount / totalCount) * 100;
     const failedPercentage = (failedCount / totalCount) * 100;
 
-    await DeliveryReceipt.create({
+    await CommsLogs.create({
       campaignId,
       customerReceipts: deliveryReceipts
     });

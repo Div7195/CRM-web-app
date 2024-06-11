@@ -52,6 +52,7 @@ const Customers = () => {
              console.log(settings.body)
              const fetchResponse = await fetch(`http://localhost:8000/addCustomer`, settings);
              const response = await fetchResponse.json();
+             setCustomers([...customers, newCustomer])
              setNewCustomer({
                 customerName:'',
                 customerEmail:'',
