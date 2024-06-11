@@ -61,7 +61,7 @@ dbConnection(USERNAME, PASSWORD);
     }
     };
 
-  setInterval(batchUpdate, batchUpdateInterval);
+  // setInterval(batchUpdate, batchUpdateInterval);
   channel.consume('customerQueueee', async (msg) => {
     try {
         
