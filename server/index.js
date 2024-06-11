@@ -8,7 +8,7 @@ import amqp from 'amqplib';
 import passport from 'passport';
 import cookieSession from 'cookie-session';
 import authRoute from './auth.js'
-// import passportSetup from './passport.js'
+import passportSetup from './passport.js'
 dotenv.config();
 
 const app = express();
@@ -21,7 +21,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: "https://xeno-task-divanshs-projects.vercel.app",
+    origin: "https://xeno-task-frontend.vercel.app",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
