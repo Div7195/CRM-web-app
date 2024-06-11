@@ -156,7 +156,7 @@ const Sidebar = () => {
             
 
             <div className='home-box'
-            onClick={() => {window.open("http://localhost:8000/auth/logout", "_self");}}
+            onClick={() => {window.open("https://xeno-task.onrender.com/auth/logout", "_self");}}
             >
                 <div style={{ color: '#00ecff' ,fontSize:'25px', cursor : 'pointer'}}>
                     <LogoutIcon/>

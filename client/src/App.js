@@ -21,7 +21,7 @@ function App() {
   
   useEffect(() => {
     const getUser = () => {
-      fetch("http://localhost:8000/auth/login/success", {
+      fetch("https://xeno-task.onrender.com/auth/login/success", {
         method: "GET",
         credentials: "include",
         headers: {

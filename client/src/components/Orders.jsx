@@ -57,7 +57,7 @@ const options = {
          }
          try {
              console.log(settings.body)
-             const fetchResponse = await fetch(`http://localhost:8000/addOrder`, settings);
+             const fetchResponse = await fetch(`https://xeno-task.onrender.com/addOrder`, settings);
              const response = await fetchResponse.json();
              setNewOrder({
                 customerId:'',
@@ -75,12 +75,12 @@ const options = {
       useEffect(() => {
         
         const myFunction = async() => {
-            const url1 = `http://localhost:8000/getOrders?customer=all`;
+            const url1 = `https://xeno-task.onrender.com/getOrders?customer=all`;
             const settings = {
             method: 'GET',
             credentials: "include",
             };
-            const url2 = "http://localhost:8000/getCustomers"
+            const url2 = "https://xeno-task.onrender.com/getCustomers"
         
         try {
             const fetchResponse = await fetch(url1, settings);

@@ -11,7 +11,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     const loginUsingGoogle = () => {
-        window.open("http://localhost:8000/auth/google", "_self");
+        window.open("https://xeno-task.onrender.com/auth/google", "_self");
    
 };
     
@@ -32,7 +32,7 @@ const Login = () => {
         };
         try {
             console.log(settings.body)
-            const fetchResponse = await fetch(`http://localhost:8000/login`, settings);
+            const fetchResponse = await fetch(`https://xeno-task.onrender.com/login`, settings);
             const response = await fetchResponse.json();
             setError('');
             if (response.msg === 'Account does not exist') {

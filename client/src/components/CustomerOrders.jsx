@@ -50,7 +50,7 @@ const options = {
       useEffect(() => {
         
         const myFunction = async() => {
-            const url1 = `http://localhost:8000/getOrders?customer=${customerId}`;
+            const url1 = `https://xeno-task.onrender.com/getOrders?customer=${customerId}`;
             const settings = {
             method: 'GET',
             credentials: "include",

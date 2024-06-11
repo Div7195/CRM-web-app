@@ -60,7 +60,7 @@ const options = {
       useEffect(() => {
         
         const myFunction = async() => {
-            const url1 = `http://localhost:8000/getAllCampaigns?audienceId=${audienceId}`;
+            const url1 = `https://xeno-task.onrender.com/getAllCampaigns?audienceId=${audienceId}`;
             const settings = {
             method: 'GET',
             credentials: "include",

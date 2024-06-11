@@ -64,12 +64,12 @@ const options = {
       useEffect(() => {
         
         const myFunction = async() => {
-            const url1 = `http://localhost:8000/getAllCampaigns?customerId=${customerId}`;
+            const url1 = `https://xeno-task.onrender.com/getAllCampaigns?customerId=${customerId}`;
             const settings = {
             method: 'GET',
             credentials: "include",
             };
-            const url2 = "http://localhost:8000/getAllAudiences"
+            const url2 = "https://xeno-task.onrender.com/getAllAudiences"
         
         try {
             const fetchResponse = await fetch(url1, settings);
