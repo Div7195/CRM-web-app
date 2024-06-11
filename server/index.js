@@ -21,7 +21,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: ["https://xeno-task.vercel.app"],
+    origin: "https://xeno-task.vercel.app",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
