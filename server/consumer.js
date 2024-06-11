@@ -5,7 +5,6 @@ import Order from './models/order-schema.js';
 import dbConnection from './database/db.js';
 import dotenv from 'dotenv'
 import Audience from './models/audience-model.js';
-import nodemailer from 'nodemailer';
 import Campaign from './models/campaign-schema.js';
 import axios from 'axios'
 import DeliveryReceipt from './models/commslog-schema.js';
@@ -33,7 +32,36 @@ dbConnection(USERNAME, PASSWORD);
   await channel.assertQueue('getSingleAudienceQueue', {durable:true})
   await channel.assertQueue('getCustomerssssQueue', {durable:true})
   await channel.assertQueue('getOrdersQueue', {durable:true})
-  
+  await channel.assertQueue('updateDeliveryReceiptQueue', {durable:true})
+
+  const batchUpdateInterval = 500; // Interval for batch updates in milliseconds
+    let updateBatch = [];
+
+    const batchUpdate = async () => {
+      try {
+        
+      
+      if (updateBatch && updateBatch.length > 0) {
+        const batch = [...updateBatch];
+        updateBatch = [];
+
+        const bulkOps = batch.map(({ campaignId, customerId }) => ({
+          updateOne: {
+            filter: { campaignId },
+            update: { $push: { customerReceipts: { customerId, status: Math.random() < 0.9 ? 'SENT' : 'FAILED' } } },
+            upsert: true
+          }
+        }));
+        console.log(bulkOps)
+        await DeliveryReceipt.bulkWrite(bulkOps);
+        console.log('Batch update complete');
+      }
+    } catch (error) {
+        console.log(error)
+    }
+    };
+
+  setInterval(batchUpdate, batchUpdateInterval);
   channel.consume('customerQueueee', async (msg) => {
     try {
         
@@ -265,51 +293,85 @@ dbConnection(USERNAME, PASSWORD);
   }, { noAck: false });
 
 
+  // channel.consume('sendEmailsQueue', async(msg) => {
+  //   const { audienceId, subject, messageBody, responseQueue } = JSON.parse(msg.content.toString());
+  //   try {
+    
+  //       const list = await Audience.findById(audienceId).populate('customers');
+  //       if (!list) return res.status(404).json({ error: 'List not found' });
+
+  //       let testAccount = await nodemailer.createTestAccount()
+        
+  //           let transporter = nodemailer.createTransport({
+  //               host: 'smtp.ethereal.email',
+  //               port: 587,
+  //               secure: false, 
+  //               auth: {
+  //                   user: testAccount.user, 
+  //                   pass: testAccount.pass
+  //               }
+  //           });
+
+  //       for (const user of list.customers) {
+  //           const body = messageBody.replace(/\[(\w+)\]/g, (_, prop) => user.customerName || '');
+  //           await transporter.sendMail({
+  //               from: testAccount.user,
+  //               to: user.customerEmail,
+  //               subject,
+  //               text: body
+  //           });
+  //       }
+
+  //       const campaign = new Campaign({
+  //         audienceId,
+  //         subject,
+  //         messageBody
+  //       });
+  //       await campaign.save();
+  //       const response = await axios.post('http://localhost:8000/getDeliveryReceipts', { campaignId:campaign._id });
+  //       const { sentPercentage, failedPercentage } = response.data;
+
+  //       const message = {
+  //           msg: 'Emails sent successfully with delivery receipt rates.',
+  //           sentPercentage: sentPercentage,
+  //           failedPercentage: failedPercentage,
+  //           audienceSize:list.customers.length
+  //       };
+  //       channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify(message)));
+  //     channel.ack(msg);
+  //     } catch (error) {
+  //       console.error('Error sending emails:', error);
+  //     channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Error sending emails' })));
+  //     channel.ack(msg);
+  //     }
+  // }, { noAck: false })
+
+
   channel.consume('sendEmailsQueue', async(msg) => {
     const { audienceId, subject, messageBody, responseQueue } = JSON.parse(msg.content.toString());
     try {
     
         const list = await Audience.findById(audienceId).populate('customers');
         if (!list) return res.status(404).json({ error: 'List not found' });
-
-        let testAccount = await nodemailer.createTestAccount()
         
-            let transporter = nodemailer.createTransport({
-                host: 'smtp.ethereal.email',
-                port: 587,
-                secure: false, 
-                auth: {
-                    user: testAccount.user, 
-                    pass: testAccount.pass
-                }
-            });
-
-        for (const user of list.customers) {
-            const body = messageBody.replace(/\[(\w+)\]/g, (_, prop) => user.customerName || '');
-            await transporter.sendMail({
-                from: testAccount.user,
-                to: user.customerEmail,
-                subject,
-                text: body
-            });
-        }
-
         const campaign = new Campaign({
           audienceId,
           subject,
           messageBody
         });
-        await campaign.save();
-        const response = await axios.post('http://localhost:8000/getDeliveryReceipts', { campaignId:campaign._id });
-        const { sentPercentage, failedPercentage } = response.data;
+        
+        await campaign.save()
+        for (const customer of list.customers) {
+          const emailRequest = { customerId: customer._id, subject, messageBody, campaignId:campaign._id };
+          await axios.post('http://localhost:8000/sendAnEmail', emailRequest);
+        }
+        
+        
 
         const message = {
-            msg: 'Emails sent successfully with delivery receipt rates.',
-            sentPercentage: sentPercentage,
-            failedPercentage: failedPercentage,
-            audienceSize:list.customers.length
+            msg: 'Emails sent with delivery receipt rates.',
         };
-        channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify(message)));
+      channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify(message)));
       channel.ack(msg);
       } catch (error) {
         console.error('Error sending emails:', error);
@@ -317,6 +379,21 @@ dbConnection(USERNAME, PASSWORD);
       channel.ack(msg);
       }
   }, { noAck: false })
+
+
+  channel.consume('updateDeliveryReceiptQueue', async (msg) => {
+      try {
+        const { campaignId, customerId } = JSON.parse(msg.content.toString());
+        
+        updateBatch.push({ campaignId, customerId });
+        
+        channel.ack(msg);
+      } catch (error) {
+        console.error('Error processing message:', error);
+        channel.reject(msg, true);
+      }
+    }, { noAck: false });
+
 
 
   channel.consume('getCampaignsQueue', async (msg) => {
@@ -334,6 +411,7 @@ dbConnection(USERNAME, PASSWORD);
         if(customerId === "nil"){
           campaigns = await Campaign.find().sort({ date: -1 });
         }else{
+          console.log('customer id is ' + customerId)
           const audiences = await Audience.find({ customers: customerId });
         const audienceIds = audiences.map(audience => audience._id);
         campaigns = await Campaign.find({ audienceId: { $in: audienceIds } }).sort({ date: -1 });
