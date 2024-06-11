@@ -1,7 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 
-const CLIENT_URL = "https://xeno-task-frontend.vercel.app/";
+const CLIENT_URL = "https://xeno-task-frontend.vercel.app";
 
 const router = Router();
 
