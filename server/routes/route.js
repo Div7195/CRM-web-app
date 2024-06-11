@@ -3,7 +3,6 @@ import multer from 'multer';
 
 import { addCustomerController, checkAudienceSizeController, deliveryReceiptController, getAllAudiencesController, getCampaignsController, getCustomersController, getSingleAudience, saveAudienceController, sendAnEmailController, sendEmailsController,updateDeliveryReceiptController } from '../controllers/customerControllers.js';
 import { addNewOrderController, getOrdersController } from '../controllers/orderControllers.js';
-import { loginUserController } from '../controllers/loginControllers.js';
 import checkAuthentication from '../middleware/checkAuth.js';
 
 
@@ -22,6 +21,5 @@ router.get('/getAllCampaigns', getCampaignsController);
 router.get('/getAllAudiences', getAllAudiencesController);
 router.get('/getSingleAudience/:audienceId', getAllAudiencesController);
 router.post('/getDeliveryReceipts', deliveryReceiptController);
-// router.post('/login', loginUserController);
 
 export default router;

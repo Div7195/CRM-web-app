@@ -34,7 +34,7 @@ dbConnection(USERNAME, PASSWORD);
   await channel.assertQueue('getOrdersQueue', {durable:true})
   await channel.assertQueue('updateDeliveryReceiptQueue', {durable:true})
 
-  const batchUpdateInterval = 500; // Interval for batch updates in milliseconds
+  const batchUpdateInterval = 500; 
     let updateBatch = [];
 
     const batchUpdate = async () => {
@@ -291,60 +291,6 @@ dbConnection(USERNAME, PASSWORD);
       channel.ack(msg);
     }
   }, { noAck: false });
-
-
-  // channel.consume('sendEmailsQueue', async(msg) => {
-  //   const { audienceId, subject, messageBody, responseQueue } = JSON.parse(msg.content.toString());
-  //   try {
-    
-  //       const list = await Audience.findById(audienceId).populate('customers');
-  //       if (!list) return res.status(404).json({ error: 'List not found' });
-
-  //       let testAccount = await nodemailer.createTestAccount()
-        
-  //           let transporter = nodemailer.createTransport({
-  //               host: 'smtp.ethereal.email',
-  //               port: 587,
-  //               secure: false, 
-  //               auth: {
-  //                   user: testAccount.user, 
-  //                   pass: testAccount.pass
-  //               }
-  //           });
-
-  //       for (const user of list.customers) {
-  //           const body = messageBody.replace(/\[(\w+)\]/g, (_, prop) => user.customerName || '');
-  //           await transporter.sendMail({
-  //               from: testAccount.user,
-  //               to: user.customerEmail,
-  //               subject,
-  //               text: body
-  //           });
-  //       }
-
-  //       const campaign = new Campaign({
-  //         audienceId,
-  //         subject,
-  //         messageBody
-  //       });
-  //       await campaign.save();
-  //       const response = await axios.post('http://localhost:8000/getDeliveryReceipts', { campaignId:campaign._id });
-  //       const { sentPercentage, failedPercentage } = response.data;
-
-  //       const message = {
-  //           msg: 'Emails sent successfully with delivery receipt rates.',
-  //           sentPercentage: sentPercentage,
-  //           failedPercentage: failedPercentage,
-  //           audienceSize:list.customers.length
-  //       };
-  //       channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify(message)));
-  //     channel.ack(msg);
-  //     } catch (error) {
-  //       console.error('Error sending emails:', error);
-  //     channel.sendToQueue(responseQueue, Buffer.from(JSON.stringify({ error: 'Error sending emails' })));
-  //     channel.ack(msg);
-  //     }
-  // }, { noAck: false })
 
 
   channel.consume('sendEmailsQueue', async(msg) => {

@@ -19,33 +19,10 @@ const options = {
 
 };
 
-
-    const [newOrder, setNewOrder] = useState({
-        customerId:'',
-        orderTotalAmount:'',
-        
-    })
-    const [isPopupVisible, setIsPopupVisible] = useState(false);
+   
     const [orders, setOrders] = useState([])
-    const [customers, setCustomers] = useState([])
-    const openAddForm = () => {
-        setIsPopupVisible(true)
-    }   
-    const closeAddForm = (e) => {
-        if (e.target.className.includes('popup-container')) {
-          setIsPopupVisible(false);
-        }
-      };
-
-    const onValueChange = (e) => {
-        setNewOrder({...newOrder, [e.target.name]:e.target.value})
-        console.log(newOrder)
-    }
-    const onSelectValueChange = (e) => {
-        setNewOrder({...newOrder, [e.target.name]:e.target.value})
-        console.log(newOrder)
-    }
-
+   
+   
       
       useEffect(() => {
         

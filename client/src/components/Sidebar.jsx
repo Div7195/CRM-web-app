@@ -8,10 +8,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import '../css/sidebar.css'
 const Sidebar = () => {
     const navigate = useNavigate()
-    const [customerButton, setCustomersActive] = useState(false)
-    const [audienceButton, setAudiencesActive] = useState(false)
-    const [campaignsButton, setCampaignsActive] = useState(false)
-    const [ordersButton, setOrdersActive] = useState(false)
 
     return(
         <>

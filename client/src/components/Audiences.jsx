@@ -8,7 +8,6 @@ const Orders = () => {
     const [reload, setReload] = useState(false)
     const navigate = useNavigate()
     const isoTimestamp = '2024-06-07T13:41:09.063Z';
-const date = new Date(isoTimestamp);
 const [audienceSize, setAudienceSize] = useState('')
 const [message, setMessage] = useState('')
 const [email, setEmail] = useState({
@@ -17,17 +16,7 @@ const [email, setEmail] = useState({
     messageBody:'',
     audienceName:''
 })
-const options = {
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-  hour: 'numeric',
-  minute: 'numeric',
-  second: 'numeric',
-  hour12: true,
 
-};
 
 
     const [newAudience, setNewAudience] = useState({

@@ -7,7 +7,6 @@ import CampaignIcon from '@mui/icons-material/Campaign';
 const Campaigns = () => {
     const [reload, setReload] = useState(false)
     const isoTimestamp = '2024-06-07T13:41:09.063Z';
-const date = new Date(isoTimestamp);
 
 const options = {
   weekday: 'long',

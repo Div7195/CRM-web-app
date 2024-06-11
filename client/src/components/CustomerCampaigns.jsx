@@ -10,7 +10,6 @@ const CustomerCampaigns = () => {
     const navigate = useNavigate()
     const {customerId} = useParams()
     const isoTimestamp = '2024-06-07T13:41:09.063Z';
-const date = new Date(isoTimestamp);
 
 const options = {
   weekday: 'long',
@@ -24,43 +23,7 @@ const options = {
 
 };
 
-
-    const [newOrder, setNewOrder] = useState({
-        customerId:'',
-        orderTotalAmount:'',
-        
-    })
-    const [message, setMessage] = useState('')
-    const [email, setEmail] = useState({
-        audienceId:'',
-        subject:'',
-        messageBody:'',
-        
-    })
-    const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [campaigns, setCampaigns] = useState([])
-    const [audiences, setAudiences] = useState([])
-    const openAddForm = (id, name) => {
-        setIsPopupVisible(true)
-        
-    }   
-    const closeAddForm = (e) => {
-        if (e.target.className.includes('popup-container')) {
-          setIsPopupVisible(false);
-        }
-      };
-
-    const onValueChangeSecond = (e) => {
-        setEmail({...email, [e.target.name] : e.target.value})
-        console.log(email)
-      }
-    const onSelectValueChange = (e) => {
-        setEmail({...email, audienceId:e.target.value})
-        console.log(newOrder)
-    }
-
-
-      
       useEffect(() => {
         
         const myFunction = async() => {
