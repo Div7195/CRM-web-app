@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 
 const AudienceCampaigns = () => {
     const [reload, setReload] = useState(false)
-    const {customerId} = useParams()
+    const {audienceId} = useParams()
 const options = {
   weekday: 'long',
   year: 'numeric',
@@ -60,7 +60,7 @@ const options = {
       useEffect(() => {
         
         const myFunction = async() => {
-            const url1 = `http://localhost:8000/getAllCampaigns?customerId=${customerId}`;
+            const url1 = `http://localhost:8000/getAllCampaigns?audienceId=${audienceId}`;
             const settings = {
             method: 'GET',
             credentials: "include",
