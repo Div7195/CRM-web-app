@@ -8,7 +8,10 @@ import HomeIcon from '@mui/icons-material/Home';
 import '../css/sidebar.css'
 const Sidebar = () => {
     const navigate = useNavigate()
-    
+    const [customerButton, setCustomersActive] = useState(false)
+    const [audienceButton, setAudiencesActive] = useState(false)
+    const [campaignsButton, setCampaignsActive] = useState(false)
+    const [ordersButton, setOrdersActive] = useState(false)
 
     return(
         <>
@@ -153,7 +156,7 @@ const Sidebar = () => {
             
 
             <div className='home-box'
-            onClick={() => {window.open("https://xeno-task.onrender.com/auth/logout", "_self");}}
+            onClick={() => {window.open("http://localhost:8000/auth/logout", "_self");}}
             >
                 <div style={{ color: '#00ecff' ,fontSize:'25px', cursor : 'pointer'}}>
                     <LogoutIcon/>

@@ -10,7 +10,6 @@ const CustomerCampaigns = () => {
     const navigate = useNavigate()
     const {customerId} = useParams()
     const isoTimestamp = '2024-06-07T13:41:09.063Z';
-const date = new Date(isoTimestamp);
 
 const options = {
   weekday: 'long',
@@ -23,25 +22,23 @@ const options = {
   hour12: true,
 
 };
+
     const [campaigns, setCampaigns] = useState([])
       useEffect(() => {
         
         const myFunction = async() => {
-            const url1 = `https://xeno-task.onrender.com/getAllCampaigns?customerId=${customerId}`;
+            const url1 = `http://localhost:8000/getAllCampaigns?customerId=${customerId}`;
             const settings = {
             method: 'GET',
             credentials: "include",
             };
-            const url2 = "https://xeno-task.onrender.com/getAllAudiences"
+            
         
         try {
             const fetchResponse = await fetch(url1, settings);
             const response = await fetchResponse.json();
             setCampaigns(response.campaigns)
-            const fetchResponse2 = await fetch(url2, settings);
-            const response2 = await fetchResponse2.json();
-            console.log(response2.audiences)
-            setAudiences(response2.audiences)
+            
             } catch (e) {
             console.log(e);
             }
