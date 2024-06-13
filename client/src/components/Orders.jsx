@@ -81,7 +81,7 @@ const options = {
             method: 'GET',
             credentials: "include",
             };
-            const url2 = "http://localhost:8000/getCustomers"
+            const url2 = "http://localhost:8000/getCustomers?audienceId=nil"
         
         try {
             const fetchResponse = await fetch(url1, settings);

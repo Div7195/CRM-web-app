@@ -25,7 +25,7 @@ export const addCustomerController = async (request, response) => {
           persistent: true,
         });
     
-        response.status(200).json({ message: 'Customer creation request received' });
+        response.status(200).json({ message: 'Customers data updated' });
         setTimeout(() => {
           channel.close();
           connection.close();
@@ -340,7 +340,9 @@ export const getCustomersController = async(req, res) => {
     }, { noAck: false });
       
   } catch (error) {
-   
+    
+      await channel.close();
+      await connection.close();  
     res.status(500).json({ error: error.message });
   }
 }

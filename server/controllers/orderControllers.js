@@ -27,7 +27,7 @@ export const addNewOrderController = async (request, response) => {
           persistent: true,
         });
         
-        response.status(202).json({ message: 'Order creation request received' });
+        response.status(202).json({ message: 'Orders data updated' });
         
       } catch (err) {
         response.status(500).json({ error: err.message });
