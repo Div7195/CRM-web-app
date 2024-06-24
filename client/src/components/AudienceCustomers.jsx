@@ -24,7 +24,7 @@ const AudienceCustomers = () => {
       useEffect(() => {
         
         const myFunction = async() => {
-            const url = `https://xeno-task.onrender.com/getCustomers?audienceId=${audienceId}`;
+            const url = `https://crm-backend-2m9p.onrender.com/getCustomers?audienceId=${audienceId}`;
             const settings = {
             method: 'GET',
             credentials: "include",

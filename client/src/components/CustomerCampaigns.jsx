@@ -27,7 +27,7 @@ const options = {
       useEffect(() => {
         
         const myFunction = async() => {
-            const url1 = `http://localhost:8000/getAllCampaigns?customerId=${customerId}`;
+            const url1 = `https://crm-backend-2m9p.onrender.com/getAllCampaigns?customerId=${customerId}`;
             const settings = {
             method: 'GET',
             credentials: "include",

@@ -50,7 +50,7 @@ const Customers = () => {
          }
          try {
              console.log(settings.body)
-             const fetchResponse = await fetch(`https://xeno-task.onrender.com/addCustomer`, settings);
+             const fetchResponse = await fetch(`https://crm-backend-2m9p.onrender.com/addCustomer`, settings);
              const response = await fetchResponse.json();
              setNewCustomer({
                 customerName:'',
@@ -68,7 +68,7 @@ const Customers = () => {
       useEffect(() => {
         
         const myFunction = async() => {
-            const url = `https://xeno-task.onrender.com/getCustomers?audienceId=nil`;
+            const url = `https://crm-backend-2m9p.onrender.com/getCustomers?audienceId=nil`;
             const settings = {
             method: 'GET',
             credentials: "include",

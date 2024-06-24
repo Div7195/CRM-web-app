@@ -8,7 +8,7 @@ const Login = () => {
    
 
     const loginUsingGoogle = () => {
-        window.open("https://xeno-task.onrender.com/auth/google", "_self");
+        window.open("https://crm-backend-2m9p.onrender.com/auth/google", "_self");
    
 };
     

@@ -10,7 +10,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://xeno-task.onrender.com/auth/google/callback",
+      callbackURL: "https://crm-backend-2m9p.onrender.com/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, done) {
       done(null, profile);

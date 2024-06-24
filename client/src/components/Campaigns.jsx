@@ -73,7 +73,7 @@ const options = {
          }
          try {
              console.log(settings.body)
-             const fetchResponse = await fetch(`https://xeno-task.onrender.com/sendEmails`, settings);
+             const fetchResponse = await fetch(`https://crm-backend-2m9p.onrender.com/sendEmails`, settings);
              const response = await fetchResponse.json();
              console.log(response.msg)
              setMessage(response.msg)
@@ -98,12 +98,12 @@ const options = {
       useEffect(() => {
         
         const myFunction = async() => {
-            const url1 = `https://xeno-task.onrender.com/getAllCampaigns?audienceId=nil`;
+            const url1 = `https://crm-backend-2m9p.onrender.com/getAllCampaigns?audienceId=nil`;
             const settings = {
             method: 'GET',
             credentials: "include",
             };
-            const url2 = "https://xeno-task.onrender.com/getAllAudiences"
+            const url2 = "https://crm-backend-2m9p.onrender.com/getAllAudiences"
         
         try {
             const fetchResponse = await fetch(url1, settings);

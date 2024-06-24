@@ -21,7 +21,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: "https://xeno-task-frontend.vercel.app",
+    origin: "https://crm-frontend-zeta.vercel.app",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
@@ -41,25 +41,25 @@ const PASSWORD = process.env.DB_PASSWORD;
 const server = app.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 
 
-let channel;
-(async () => {
-    try {
-        const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
-        console.log(connection)
-        channel = await connection.createChannel();
-        await channel.assertQueue('customerQueue', { durable: true });
-  await channel.assertQueue('orderQueue', { durable: true });
-  await channel.assertQueue('saveAudienceQueue', { durable: true });
-  await channel.assertQueue('checkAudienceSizeQueue', { durable: true });
-  await channel.assertQueue('sendEmailsQueue', { durable: true });
-  await channel.assertQueue('getCampaignsQueue',{durable:true})
-  await channel.assertQueue('getAudiencesQueue', {durable:true})
-  await channel.assertQueue('getSingleAudienceQueue', {durable:true})
-  await channel.assertQueue('getCustomersQueue', {durable:true})
-  await channel.assertQueue('getOrdersQueue', {durable:true})
-    } catch (error) {
-        console.log(error, 'sender')
-    }
+// let channel;
+// (async () => {
+//     try {
+//         const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
+//         console.log(connection)
+//         channel = await connection.createChannel();
+//         await channel.assertQueue('customerQueue', { durable: true });
+//   await channel.assertQueue('orderQueue', { durable: true });
+//   await channel.assertQueue('saveAudienceQueue', { durable: true });
+//   await channel.assertQueue('checkAudienceSizeQueue', { durable: true });
+//   await channel.assertQueue('sendEmailsQueue', { durable: true });
+//   await channel.assertQueue('getCampaignsQueue',{durable:true})
+//   await channel.assertQueue('getAudiencesQueue', {durable:true})
+//   await channel.assertQueue('getSingleAudienceQueue', {durable:true})
+//   await channel.assertQueue('getCustomersQueue', {durable:true})
+//   await channel.assertQueue('getOrdersQueue', {durable:true})
+//     } catch (error) {
+//         console.log(error, 'sender')
+//     }
   
-})();
+// })();
 dbConnection(USERNAME, PASSWORD);

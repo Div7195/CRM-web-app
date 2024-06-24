@@ -130,7 +130,7 @@ const options = {
          }
          try {
              console.log(settings.body)
-             const fetchResponse = await fetch(`https://xeno-task.onrender.com/sendEmails`, settings);
+             const fetchResponse = await fetch(`https://crm-backend-2m9p.onrender.com/sendEmails`, settings);
              const response = await fetchResponse.json();
              console.log(response.msg)
              setMessage(response.msg)
@@ -164,7 +164,7 @@ const options = {
          }
          try {
              console.log(settings.body)
-             const fetchResponse = await fetch(`https://xeno-task.onrender.com/addAudience`, settings);
+             const fetchResponse = await fetch(`https://crm-backend-2m9p.onrender.com/addAudience`, settings);
              const response = await fetchResponse.json();
              setAudiences([...audiences, newAudience])
              setNewAudience({
@@ -199,7 +199,7 @@ const options = {
          }
          try {
              console.log(settings.body)
-             const fetchResponse = await fetch(`https://xeno-task.onrender.com/getAudienceSize`, settings);
+             const fetchResponse = await fetch(`https://crm-backend-2m9p.onrender.com/getAudienceSize`, settings);
              const response = await fetchResponse.json();
             setAudienceSize(response.audienceSize)
              
@@ -213,7 +213,7 @@ const options = {
       useEffect(() => {
         
         const myFunction = async() => {
-            const url1 = `https://xeno-task.onrender.com/getAllAudiences`;
+            const url1 = `https://crm-backend-2m9p.onrender.com/getAllAudiences`;
             const settings = {
             method: 'GET',
             credentials: "include",

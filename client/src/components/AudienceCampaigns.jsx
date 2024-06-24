@@ -22,7 +22,7 @@ const options = {
       useEffect(() => {
         
         const myFunction = async() => {
-            const url1 = `https://xeno-task.onrender.com/getAllCampaigns?audienceId=${audienceId}`;
+            const url1 = `https://crm-backend-2m9p.onrender.com/getAllCampaigns?audienceId=${audienceId}`;
             const settings = {
             method: 'GET',
             credentials: "include",
