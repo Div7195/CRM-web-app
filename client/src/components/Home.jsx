@@ -10,7 +10,7 @@ const Home = () => {
             }}>
             <div className='header'>
                 <div className='title'>
-                Xeno Task - Mini CRM
+                CRM Application
                 </div>
             </div>
             <div className='classA'>
@@ -26,14 +26,14 @@ const Home = () => {
                     <div style={{
                         fontSize:'40px'
                     }}>
-                         Internship Assignment Task
+                         Your One Stop Customer Management Solution
                     </div>
                     <div style={{
                         fontSize:'70px',
                         fontWeight:'700',
                         color:'#04274a'
                     }}>
-                        Mini CRM Application
+                         CRM Application
                     </div>
                     
                     <div style={{
@@ -44,7 +44,7 @@ const Home = () => {
                     <div style={{
                         fontSize:'25px'
                     }}>
-                        Facilities To Send Campaigns
+                        Facilities To Segregate Customers, Send Campaigns
                     </div>
                 </div>
 
