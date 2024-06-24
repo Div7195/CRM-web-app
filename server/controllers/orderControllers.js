@@ -1,18 +1,7 @@
 import Customer from "../models/customer-schema.js";
 import Order from "../models/order-schema.js";
 import amqp from 'amqplib';
-let channel;
-(async () => {
-    try {
-        
-    
-  const connection = await amqp.connect('amqp://rabbitmq-service-6zl5.onrender.com');
-  channel = await connection.createChannel();
-  await channel.assertQueue('orderQueue', { durable: true });
-} catch (error) {
-        console.log(error, 'order')
-}
-})();
+
 export const addNewOrderController = async (request, response) => {
     try {
         const { customerId, orderTotalAmount } = request.body;
